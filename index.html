@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기영이 차트 | 초보자를 위한 주식 예측</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-gold)">
+          <path d="M3 3v18h18" />
+          <path d="m19 9-5 5-4-4-3 3" />
+        </svg>
+        <h1>기영이 차트</h1>
+      </div>
+      <div class="controls">
+        <button id="btn-samsung" class="active">삼성전자</button>
+        <button id="btn-skhynix">SK하이닉스</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="chart-container glow-effect">
+        <div id="loading" class="loading-overlay">
+          <div class="spinner"></div>
+          <p>기영이가 데이터를 가져오고 있어요...</p>
+        </div>
+        <div id="chart"></div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="panel">
+          <h2>기영이의 진단</h2>
+          <div id="commentary" class="commentary-box">
+            <p>종목을 선택하면 기영이가 차트를 분석해줄 거예요!</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>현재 시세</h2>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">현재가</span>
+              <span id="stat-price" class="stat-value">-</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">변동률</span>
+              <span id="stat-change" class="stat-value">-</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">고가</span>
+              <span id="stat-high" class="stat-value">-</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">저가</span>
+              <span id="stat-low" class="stat-value">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>예측 근거 (Past Matches)</h2>
+          <div id="prediction-basis" class="basis-list">
+            <p class="empty-msg">데이터 분석 중...</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+  </div>
+  <div id="chart-tooltip" class="chart-tooltip hidden">
+    <div id="mini-chart" class="mini-chart"></div>
+    <div class="tooltip-info">당시 차트 상황</div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
