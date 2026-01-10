@@ -1,0 +1,86 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #131722;
+    color: white;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+.main-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.content-area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.chart-section {
+    flex: 1;
+    padding: 24px;
+    overflow: auto;
+    min-width: 0;
+    /* Prevent flex item from overflowing */
+}
+
+.prediction-sidebar {
+    width: 320px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+/* 스크롤바 스타일링 */
+.chart-section::-webkit-scrollbar,
+.prediction-sidebar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.chart-section::-webkit-scrollbar-track,
+.prediction-sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.chart-section::-webkit-scrollbar-thumb,
+.prediction-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.chart-section::-webkit-scrollbar-thumb:hover,
+.prediction-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+    .prediction-sidebar {
+        width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-area {
+        flex-direction: column;
+    }
+
+    .prediction-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        max-height: 300px;
+    }
+}

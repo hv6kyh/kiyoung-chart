@@ -1,0 +1,32 @@
+<div class="app-container">
+    <!-- Header -->
+    <app-header></app-header>
+
+    <!-- Main Layout: Sidebar + Content -->
+    <div class="main-layout">
+        <!-- Left Sidebar: Stock Selection -->
+        <app-stock-sidebar (stockSelected)="selectSymbol($event)">
+        </app-stock-sidebar>
+
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <div class="content-area">
+                <!-- Chart Area -->
+                <div class="chart-section">
+                    <app-chart [data]="predictionData()"></app-chart>
+                </div>
+
+                <!-- Right Sidebar: Prediction Info -->
+                <div class="prediction-sidebar">
+                    <app-sidebar [data]="predictionData()"></app-sidebar>
+                </div>
+            </div>
+
+            <!-- Router Outlet for Future Routes -->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <app-footer></app-footer>
+</div>

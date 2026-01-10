@@ -5,17 +5,8 @@ import { OHLC } from '../../types/stock.types';
 @Component({
     selector: 'app-mini-chart',
     standalone: true,
-    template: `<div #chartContainer class="mini-chart-container"></div>`,
-    styles: [`
-    .mini-chart-container {
-      width: 300px;
-      height: 150px;
-      border-radius: 8px;
-      overflow: hidden;
-      background: rgba(19, 23, 34, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-  `]
+    templateUrl: './mini-chart.component.html',
+    styleUrls: ['./mini-chart.component.css']
 })
 export class MiniChartComponent implements AfterViewInit, OnDestroy, OnChanges {
     @ViewChild('chartContainer') chartContainer!: ElementRef;

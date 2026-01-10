@@ -1,0 +1,26 @@
+<aside class="stock-sidebar glass" [class.collapsed]="isCollapsed()">
+    <div class="sidebar-header">
+        <h2 *ngIf="!isCollapsed()">종목 선택</h2>
+        <button class="toggle-btn" (click)="toggleSidebar()" [title]="isCollapsed() ? '펼치기' : '접기'">
+            {{ isCollapsed() ? '▶' : '◀' }}
+        </button>
+    </div>
+
+    <nav class="stock-list" *ngIf="!isCollapsed()">
+        <button *ngFor="let stock of stocks()" class="stock-item" [class.active]="selectedStock() === stock.code"
+            (click)="selectStock(stock.code)">
+            <span class="stock-icon">{{ stock.icon }}</span>
+            <div class="stock-info">
+                <span class="stock-name">{{ stock.name }}</span>
+                <span class="stock-code">{{ stock.code }}</span>
+            </div>
+        </button>
+    </nav>
+
+    <div class="sidebar-footer" *ngIf="!isCollapsed()">
+        <button class="add-stock-btn">
+            <span>➕</span>
+            <span>종목 추가</span>
+        </button>
+    </div>
+</aside>

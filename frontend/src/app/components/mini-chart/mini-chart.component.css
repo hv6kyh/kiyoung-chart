@@ -1,0 +1,8 @@
+.mini-chart-container {
+    width: 300px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(19, 23, 34, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

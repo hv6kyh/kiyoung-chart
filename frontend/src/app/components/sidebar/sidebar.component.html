@@ -1,0 +1,32 @@
+<div class="sidebar-container glass">
+    <section class="diagnosis-card card">
+        <h3>기영이의 진단</h3>
+        <div class="diagnosis-content">
+            <div class="kiyoung-avatar">Banana</div>
+            <p>{{ diagnosisMessage() }}</p>
+        </div>
+    </section>
+
+    <section class="matches-card card">
+        <h3>예측 근거 (Past Matches)</h3>
+        <div class="matches-list">
+            @for (match of data()?.matches; track match.date; let i = $index) {
+            <div class="match-item glass-dark" (mouseenter)="showTooltip(match, $event)" (mouseleave)="hideTooltip()">
+                <span class="match-date">과거: {{ match.date }}</span>
+                <span class="match-corr">종합 유사도: {{ (match.correlation * 100) | number:'1.1-1' }}%</span>
+            </div>
+            } @empty {
+            <p class="empty-msg">데이터 분석 중...</p>
+            }
+        </div>
+    </section>
+
+    @if (tooltipVisible()) {
+    <div class="tooltip-container" [style.top.px]="tooltipPosition().y" [style.left.px]="tooltipPosition().x">
+        <div class="tooltip-header">
+            <span>{{ tooltipData()?.date }} 패턴</span>
+        </div>
+        <app-mini-chart [data]="tooltipData()?.windowData || []"></app-mini-chart>
+    </div>
+    }
+</div>

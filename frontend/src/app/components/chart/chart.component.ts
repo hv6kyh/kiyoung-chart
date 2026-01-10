@@ -5,16 +5,8 @@ import { PredictionResult, OHLC } from '../../types/stock.types';
 @Component({
     selector: 'app-chart',
     standalone: true,
-    template: `<div #chartContainer class="chart-container"></div>`,
-    styles: [`
-    .chart-container {
-      width: 100%;
-      height: 600px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-  `]
+    templateUrl: './chart.component.html',
+    styleUrls: ['./chart.component.css']
 })
 export class ChartComponent implements AfterViewInit, OnDestroy {
     @ViewChild('chartContainer') chartContainer!: ElementRef;

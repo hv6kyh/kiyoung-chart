@@ -1,0 +1,50 @@
+.app-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+.footer-left p {
+    margin: 0;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #2196f3;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.glass {
+    background: rgba(19, 23, 34, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}

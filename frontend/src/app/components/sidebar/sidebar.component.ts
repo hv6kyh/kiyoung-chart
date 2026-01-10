@@ -7,82 +7,8 @@ import { MiniChartComponent } from '../mini-chart/mini-chart.component';
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, MiniChartComponent],
-  template: `
-    <div class="sidebar-container glass">
-      <section class="diagnosis-card card">
-        <h3>기영이의 진단</h3>
-        <div class="diagnosis-content">
-          <div class="kiyoung-avatar">🍌</div>
-          <p>{{ diagnosisMessage() }}</p>
-        </div>
-      </section>
-
-      <section class="matches-card card">
-        <h3>예측 근거 (Past Matches)</h3>
-        <div class="matches-list">
-          @for (match of data()?.matches; track match.date; let i = $index) {
-            <div class="match-item glass-dark" 
-                 (mouseenter)="showTooltip(match, $event)"
-                 (mouseleave)="hideTooltip()">
-              <span class="match-date">과거: {{ match.date }}</span>
-              <span class="match-corr">종합 유사도: {{ (match.correlation * 100) | number:'1.1-1' }}%</span>
-            </div>
-          } @empty {
-            <p class="empty-msg">데이터 분석 중...</p>
-          }
-        </div>
-      </section>
-
-      @if (tooltipVisible()) {
-        <div class="tooltip-container" 
-             [style.top.px]="tooltipPosition().y"
-             [style.left.px]="tooltipPosition().x">
-          <div class="tooltip-header">
-            <span>{{ tooltipData()?.date }} 패턴</span>
-          </div>
-          <app-mini-chart [data]="tooltipData()?.windowData || []"></app-mini-chart>
-        </div>
-      }
-    </div>
-  `,
-  styles: [`
-    .sidebar-container { display: flex; flex-direction: column; gap: 20px; padding: 20px; color: white; height: 100%; position: relative; }
-    .card { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
-    .kiyoung-avatar { font-size: 40px; margin-bottom: 10px; }
-    .match-item { 
-      padding: 10px; 
-      margin-bottom: 8px; 
-      border-radius: 8px; 
-      display: flex; 
-      flex-direction: column; 
-      font-size: 0.9rem; 
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .match-item:hover {
-      background: rgba(33, 150, 243, 0.2);
-      transform: translateX(5px);
-    }
-    .match-corr { color: #fbc02d; font-weight: bold; }
-    .glass-dark { background: rgba(0, 0, 0, 0.3); }
-    .tooltip-container {
-      position: fixed;
-      z-index: 1000;
-      background: rgba(19, 23, 34, 0.98);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-      pointer-events: none;
-    }
-    .tooltip-header {
-      font-size: 0.85rem;
-      color: #2196f3;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-  `]
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
   data = input<PredictionResult | null>(null);
