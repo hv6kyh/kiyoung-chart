@@ -1,0 +1,22 @@
+{
+    "name": "kiyoung-chart-backend",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch src/server.ts",
+        "build": "tsc",
+        "start": "node dist/server.js"
+    },
+    "dependencies": {
+        "express": "^5.0.0",
+        "cors": "^2.8.5",
+        "yahoo-finance2": "^3.11.2"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "@types/node": "^20.0.0",
+        "@types/express": "^5.0.0",
+        "@types/cors": "^2.8.17",
+        "tsx": "^4.0.0"
+    }
+}
