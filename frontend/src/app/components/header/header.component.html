@@ -6,8 +6,14 @@
             <!-- <small>Enterprise v20</small> -->
         </h1>
         <div class="header-actions">
-            <button class="icon-btn" title="설정">⚙️</button>
+            @if (!authService.isLoggedIn()) {
+            <button class="auth-btn" (click)="authService.openModal('login')">로그인</button>
+            <button class="auth-btn signup" (click)="authService.openModal('signup')">회원가입</button>
+            } @else {
             <button class="icon-btn" title="알림">🔔</button>
+            <button class="icon-btn" title="설정">⚙️</button>
+            <button class="icon-btn logout" (click)="authService.logout()" title="로그아웃">🚪</button>
+            }
         </div>
     </div>
 </header>

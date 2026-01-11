@@ -1,0 +1,47 @@
+<div class="modal-overlay" (click)="authService.closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="authService.closeModal()">✕</button>
+
+        <div class="auth-tabs">
+            <button class="tab-btn" [class.active]="authService.authMode() === 'login'"
+                (click)="setMode('login')">로그인</button>
+            <button class="tab-btn" [class.active]="authService.authMode() === 'signup'"
+                (click)="setMode('signup')">회원가입</button>
+        </div>
+
+        @if (authService.authMode() === 'login') {
+        <div class="login-form">
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>비밀번호</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            <button class="submit-btn" (click)="authService.login()">로그인</button>
+        </div>
+        } @else {
+        <div class="signup-form">
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>비밀번호</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            <button class="submit-btn" (click)="authService.login()">가입하기</button>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <button class="kakao-login-btn">
+                <span class="kakao-icon">💬</span>
+                카카오로 시작하기
+            </button>
+        </div>
+        }
+    </div>
+</div>

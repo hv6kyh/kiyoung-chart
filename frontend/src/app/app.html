@@ -29,4 +29,8 @@
 
     <!-- Footer -->
     <app-footer></app-footer>
+
+    @if (authService.showAuthModal()) {
+    <app-auth-modal></app-auth-modal>
+    }
 </div>

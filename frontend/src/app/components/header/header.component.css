@@ -58,3 +58,35 @@ small {
   background: rgba(19, 23, 34, 0.95);
   backdrop-filter: blur(10px);
 }
+
+.auth-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.auth-btn.signup {
+  background: #00ff88;
+  color: #002e1c;
+  border: none;
+  font-weight: 600;
+}
+
+.auth-btn.signup:hover {
+  background: #00e67a;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.logout:hover {
+  background: rgba(255, 59, 48, 0.2);
+}

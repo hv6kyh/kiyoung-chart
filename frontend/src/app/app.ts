@@ -7,6 +7,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { StockSidebarComponent } from './components/stock-sidebar/stock-sidebar.component';
+import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
+import { AuthService } from './services/auth.service';
 import { PredictionResult } from './types/stock.types';
 
 @Component({
@@ -19,7 +21,8 @@ import { PredictionResult } from './types/stock.types';
     FooterComponent,
     StockSidebarComponent,
     ChartComponent,
-    SidebarComponent
+    SidebarComponent,
+    AuthModalComponent
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
@@ -28,7 +31,10 @@ export class App implements OnInit {
   currentSymbol = signal('005930.KS');
   predictionData = signal<PredictionResult | null>(null);
 
-  constructor(private stockService: StockService) { }
+  constructor(
+    private stockService: StockService,
+    public authService: AuthService
+  ) { }
 
   ngOnInit() {
     this.loadData();

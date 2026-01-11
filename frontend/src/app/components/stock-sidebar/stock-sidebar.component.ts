@@ -1,5 +1,6 @@
 import { Component, signal, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 export interface StockSymbol {
   code: string;
@@ -10,7 +11,7 @@ export interface StockSymbol {
 @Component({
   selector: 'app-stock-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './stock-sidebar.component.html',
   styleUrls: ['./stock-sidebar.component.css']
 })
