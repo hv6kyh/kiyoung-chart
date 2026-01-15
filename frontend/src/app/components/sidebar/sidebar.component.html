@@ -4,16 +4,28 @@
             <h3 class="card-title">데이터 통합 분석</h3>
             <div class="metric-container">
                 <div class="metric-item">
+                    <span class="m-label">RSI 상태</span>
+                    <span class="m-value" [class.warning]="rsiAnalysis()?.status !== '중립'">
+                        {{ rsiStatusDisplay() }}
+                    </span>
+                </div>
+                <div class="metric-item">
+                    <span class="m-label">모멘텀 신호</span>
+                    <span class="m-value" [class.high]="rsiAnalysis()?.divergence_type !== 'None'">
+                        {{ momentumSignal() }}
+                    </span>
+                </div>
+                <div class="metric-item">
+                    <span class="m-label">패턴 신뢰도</span>
+                    <span class="m-value" [class.high]="confidenceScore() > 60">
+                        {{ confidenceScore() }}% {{ confidenceLevel() }}
+                    </span>
+                </div>
+                <div class="metric-item vertical">
                     <span class="m-label">RSI 코멘트</span>
-                    <span class="m-value warning">과매수 구간 진입 중</span>
-                </div>
-                <div class="metric-item">
-                    <span class="m-label">패턴 유사도</span>
-                    <span class="m-value high">94.2% 일치</span>
-                </div>
-                <div class="metric-item">
-                    <span class="m-label">매칭 케이스</span>
-                    <span class="m-value">2,481건 발견</span>
+                    <span class="m-value comment-text">
+                        "{{ rsiAnalysis()?.comment || '연산 중...' }}"
+                    </span>
                 </div>
             </div>
         </div>
@@ -37,8 +49,13 @@
                 </div>
                 } @empty {
                 <div class="empty-msg">
-                    <div class="loader-dots"><span></span><span></span><span></span></div>
-                    데이터 분석 중...
+                    <ng-container *ngIf="data(); else loading">
+                        유사한 패턴을 찾지 못했습니다.
+                    </ng-container>
+                    <ng-template #loading>
+                        <div class="loader-dots"><span></span><span></span><span></span></div>
+                        데이터 분석 중...
+                    </ng-template>
                 </div>
                 }
             </div>

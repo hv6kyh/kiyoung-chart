@@ -22,6 +22,16 @@ export interface PredictionMatch {
     timeWarp?: number;       // 시간 왜곡 정도 (일 단위)
 }
 
+export type DivergenceType = "Bullish" | "Bearish" | "None";
+
+export interface IntegratedAnalysis {
+    rsi_value: number;
+    status: '과매수' | '과매도' | '중립';
+    divergence_type: DivergenceType;
+    confidence_score: number;
+    comment: string;
+}
+
 export interface PredictionResult {
     history: OHLC[];
     matches: PredictionMatch[];
@@ -32,6 +42,7 @@ export interface PredictionResult {
     confidence68Lower: number[];
     confidence95Upper: number[];
     confidence95Lower: number[];
+    integratedAnalysis?: IntegratedAnalysis;
 }
 
 // Phase 2: 다중 시간 프레임 분석용 타입

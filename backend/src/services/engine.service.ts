@@ -152,12 +152,142 @@ export class EngineService {
         return ohlc.map(d => d.close / atr);
     }
 
+    // RSI (Relative Strength Index) 계산
+    private calculateRSI(prices: number[], period = 14): number[] {
+        if (prices.length <= period) return new Array(prices.length).fill(50);
+
+        const rsi: number[] = new Array(prices.length).fill(0);
+        let gains = 0;
+        let losses = 0;
+
+        // 초기 평균 계산 (Simple Moving Average)
+        for (let i = 1; i <= period; i++) {
+            const diff = prices[i] - prices[i - 1];
+            if (diff >= 0) gains += diff;
+            else losses -= diff;
+        }
+
+        let avgGain = gains / period;
+        let avgLoss = losses / period;
+        rsi[period] = 100 - (100 / (1 + avgGain / (avgLoss || 1)));
+
+        // Wilder's Smoothing Method
+        for (let i = period + 1; i < prices.length; i++) {
+            const diff = prices[i] - prices[i - 1];
+            if (diff >= 0) {
+                avgGain = (avgGain * (period - 1) + diff) / period;
+                avgLoss = (avgLoss * (period - 1)) / period;
+            } else {
+                avgGain = (avgGain * (period - 1)) / period;
+                avgLoss = (avgLoss * (period - 1) - diff) / period;
+            }
+            rsi[i] = 100 - (100 / (1 + avgGain / (avgLoss || 1)));
+        }
+
+        // 초기값 채우기
+        for (let i = 0; i < period; i++) rsi[i] = rsi[period];
+
+        return rsi;
+    }
+
+    // 로컬 고점/저점 탐지
+    private findLocalExtrema(data: number[], type: 'max' | 'min', window = 3): { index: number, value: number }[] {
+        const extrema: { index: number, value: number }[] = [];
+        for (let i = window; i < data.length - window; i++) {
+            let isExtrema = true;
+            for (let j = 1; j <= window; j++) {
+                if (type === 'max') {
+                    if (data[i] <= data[i - j] || data[i] <= data[i + j]) {
+                        isExtrema = false;
+                        break;
+                    }
+                } else {
+                    if (data[i] >= data[i - j] || data[i] >= data[i + j]) {
+                        isExtrema = false;
+                        break;
+                    }
+                }
+            }
+            if (isExtrema) {
+                extrema.push({ index: i, value: data[i] });
+            }
+        }
+        return extrema;
+    }
+
+    // 데이터 통합 분석 (RSI Divergence 포함)
+    public analyzeIntegrated(history: OHLC[]): import('../types/index.js').IntegratedAnalysis {
+        const prices = history.map(d => d.close);
+        const rsi = this.calculateRSI(prices);
+        const currentRsi = rsi[rsi.length - 1];
+
+        // 상태 결정
+        let status: '과매수' | '과매도' | '중립' = '중립';
+        if (currentRsi >= 70) status = '과매수';
+        else if (currentRsi <= 30) status = '과매도';
+
+        // 다이버전스 탐지 (최근 30일 데이터 기준)
+        const lookback = 30;
+        const recentPrices = prices.slice(-lookback);
+        const recentRsi = rsi.slice(-lookback);
+
+        const priceMaximas = this.findLocalExtrema(recentPrices, 'max');
+        const priceMinimas = this.findLocalExtrema(recentPrices, 'min');
+        const rsiMaximas = this.findLocalExtrema(recentRsi, 'max');
+        const rsiMinimas = this.findLocalExtrema(recentRsi, 'min');
+
+        let divergenceType: import('../types/index.js').DivergenceType = "None";
+        let confidenceScore = 50; // 기본 점수
+
+        // Bearish Divergence (하락 다이버전스): 주가는 고점을 높이나 RSI는 고점을 낮춤
+        if (priceMaximas.length >= 2 && rsiMaximas.length >= 2) {
+            const p2 = priceMaximas[priceMaximas.length - 1];
+            const p1 = priceMaximas[priceMaximas.length - 2];
+            const r2 = rsiMaximas[rsiMaximas.length - 1];
+            const r1 = rsiMaximas[rsiMaximas.length - 2];
+
+            if (p2.value > p1.value && r2.value < r1.value) {
+                divergenceType = "Bearish";
+                confidenceScore += 20;
+            }
+        }
+
+        // Bullish Divergence (상승 다이버전스): 주가는 저점을 낮추나 RSI는 저점을 높임
+        if (divergenceType === "None" && priceMinimas.length >= 2 && rsiMinimas.length >= 2) {
+            const p2 = priceMinimas[priceMinimas.length - 1];
+            const p1 = priceMinimas[priceMinimas.length - 2];
+            const r2 = rsiMinimas[rsiMinimas.length - 1];
+            const r1 = rsiMinimas[rsiMinimas.length - 2];
+
+            if (p2.value < p1.value && r2.value > r1.value) {
+                divergenceType = "Bullish";
+                confidenceScore += 20;
+            }
+        }
+
+        // 코멘트 생성
+        let comment = "지표와 주가 흐름이 일치합니다. 매칭된 과거 패턴의 추세를 안정적으로 따라갈 것으로 보입니다.";
+        if (status === '과매수' && divergenceType === 'Bearish') {
+            comment = "주가는 상승 중이나 매수 에너지가 고갈되는 하락 다이버전스가 포착되었습니다. 단기 조정 가능성이 높으니 주의가 필요합니다.";
+        } else if (status === '과매도' && divergenceType === 'Bullish') {
+            comment = "현재 과매도 구간에서 주가 하락세가 둔화되는 상승 다이버전스가 확인됩니다. 강력한 반등 변곡점일 가능성이 큽니다.";
+        }
+
+        return {
+            rsi_value: Math.round(currentRsi * 100) / 100,
+            status,
+            divergence_type: divergenceType,
+            confidence_score: Math.min(confidenceScore, 100),
+            comment
+        };
+    }
+
     public analyze(history: OHLC[], windowSize = 15, predictionSize = 10): PredictionResult {
         const targetWindow = history.slice(-windowSize);
         const targetPrices = targetWindow.map(d => d.close);
         const searchHistory = history.slice(0, -predictionSize);
 
-        const threshold = 0.82;
+        const threshold = 0.78;
         const matches: PredictionMatch[] = [];
 
         for (let i = 0; i < searchHistory.length - windowSize; i++) {
@@ -266,7 +396,8 @@ export class EngineService {
             confidence68Upper,
             confidence68Lower,
             confidence95Upper,
-            confidence95Lower
+            confidence95Lower,
+            integratedAnalysis: this.analyzeIntegrated(history)
         };
     }
 
@@ -299,7 +430,7 @@ export class EngineService {
             short: this.toTimeframeAnalysis(shortAnalysis, 7, 5),
             medium: this.toTimeframeAnalysis(mediumAnalysis, 15, 10),
             long: this.toTimeframeAnalysis(longAnalysis, 30, 15),
-            combined,
+            combined: { ...combined, integratedAnalysis: this.analyzeIntegrated(history) },
             confidence
         };
     }
@@ -431,7 +562,7 @@ export class EngineService {
             : targetWindow.map(d => d.close);
 
         // DTW 사용 시 임계값 낮춤
-        const threshold = opts.useDTW ? 0.75 : 0.82;
+        const threshold = opts.useDTW ? 0.75 : 0.78;
         const matches: PredictionMatch[] = [];
 
         for (let i = 0; i < searchHistory.length - windowSize; i++) {
@@ -551,7 +682,8 @@ export class EngineService {
             confidence68Upper,
             confidence68Lower,
             confidence95Upper,
-            confidence95Lower
+            confidence95Lower,
+            integratedAnalysis: this.analyzeIntegrated(history)
         };
     }
 }

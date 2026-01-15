@@ -16,6 +16,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     private chart!: IChartApi;
     private candleSeries!: ISeriesApi<'Candlestick'>;
     private predictionSeries!: ISeriesApi<'Line'>;
+    private matchSeries: ISeriesApi<'Line'>[] = [];
 
     // 95% 신뢰구간 (외부 구름대)
     private area95UpperSeries!: ISeriesApi<'Area'>;
@@ -118,14 +119,18 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
             lastValueVisible: false,
         });
 
-        // 평균 예측선 (점선, 가장 위)
+        // 평균 예측선 (굵은 실선)
         this.predictionSeries = this.chart.addSeries(LineSeries, {
-            color: '#3182F6',  // Solid blue, more visible
+            color: '#ff6b6b',
             lineWidth: 3,
-            lineStyle: LineStyle.Dashed,
             priceLineVisible: false,
             lastValueVisible: true,
         });
+    }
+
+    private clearProbabilityCloud() {
+        this.matchSeries.forEach(series => this.chart.removeSeries(series));
+        this.matchSeries = [];
     }
 
     // 다음 거래일 계산 (주말 건너뛰기)
@@ -173,32 +178,48 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
         ]);
         */
 
+        // 이전 확률 구름 제거
+        this.clearProbabilityCloud();
+
         // 예측 데이터 시각화
-        if (result.scenario.length > 0) {
-            const lastPrice = result.history[result.history.length - 1];
-            const lastTime = lastPrice.time as number;
+        const hasValidScenario = result.scenario.length > 0 && result.scenario.some(v => v !== 0);
+        if (hasValidScenario) {
+            const lastCandle = result.history[result.history.length - 1];
+            const lastTime = lastCandle.time as number;
 
-            console.log('✅ Prediction data exists, rendering...');
-            console.log('Last candle time:', new Date(lastTime * 1000).toLocaleDateString());
+            // 1. 확률 구름: 각 매칭 패턴을 투명도로 표시
+            result.matches.forEach((match) => {
+                const lineSeries = this.chart.addSeries(LineSeries, {
+                    color: `rgba(66, 133, 244, ${match.opacity * 0.4})`,
+                    lineWidth: 1,
+                    priceLineVisible: false,
+                    lastValueVisible: false,
+                });
 
-            // 평균 예측선 (거래일 기준으로 계산)
-            const predictionData = [
-                { time: lastTime as any, value: lastPrice.close },
-                ...result.scenario.map((price, i) => {
-                    const futureTime = this.getNextTradingDay(lastTime, i + 1);
-                    console.log(`Day ${i + 1}: ${new Date(futureTime * 1000).toLocaleDateString()} = ${price}`);
-                    return {
-                        time: futureTime as any,
+                const futureSeriesData = [
+                    { time: lastTime as any, value: lastCandle.close },
+                    ...match.future.map((price, i) => ({
+                        time: this.getNextTradingDay(lastTime, i + 1) as any,
                         value: price
-                    };
-                })
+                    }))
+                ];
+                lineSeries.setData(futureSeriesData);
+                this.matchSeries.push(lineSeries);
+            });
+
+            // 2. 메인 예측 시나리오 (굵은 선)
+            const predictionData = [
+                { time: lastTime as any, value: lastCandle.close },
+                ...result.scenario.map((price, i) => ({
+                    time: this.getNextTradingDay(lastTime, i + 1) as any,
+                    value: price
+                }))
             ];
-            console.log('📈 Prediction line data:', predictionData);
             this.predictionSeries.setData(predictionData);
 
-            // 95% 신뢰구간 상한
+            // 3. 신뢰구간 렌더링
             const area95UpperData = [
-                { time: lastTime as any, value: lastPrice.close },
+                { time: lastTime as any, value: lastCandle.close },
                 ...result.confidence95Upper.map((price, i) => ({
                     time: this.getNextTradingDay(lastTime, i + 1) as any,
                     value: price
@@ -206,9 +227,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
             ];
             this.area95UpperSeries.setData(area95UpperData);
 
-            // 95% 신뢰구간 하한
             const area95LowerData = [
-                { time: lastTime as any, value: lastPrice.close },
+                { time: lastTime as any, value: lastCandle.close },
                 ...result.confidence95Lower.map((price, i) => ({
                     time: this.getNextTradingDay(lastTime, i + 1) as any,
                     value: price
@@ -216,9 +236,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
             ];
             this.area95LowerSeries.setData(area95LowerData);
 
-            // 68% 신뢰구간 상한
             const area68UpperData = [
-                { time: lastTime as any, value: lastPrice.close },
+                { time: lastTime as any, value: lastCandle.close },
                 ...result.confidence68Upper.map((price, i) => ({
                     time: this.getNextTradingDay(lastTime, i + 1) as any,
                     value: price
@@ -226,9 +245,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
             ];
             this.area68UpperSeries.setData(area68UpperData);
 
-            // 68% 신뢰구간 하한
             const area68LowerData = [
-                { time: lastTime as any, value: lastPrice.close },
+                { time: lastTime as any, value: lastCandle.close },
                 ...result.confidence68Lower.map((price, i) => ({
                     time: this.getNextTradingDay(lastTime, i + 1) as any,
                     value: price
@@ -246,7 +264,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
         // 최근 1년 데이터만 표시 (예측 포함)
         const lastTime = result.history[result.history.length - 1].time as number;
         const oneYearAgo = lastTime - (365 * 86400); // 1년 전
-        const futureEnd = this.getNextTradingDay(lastTime, result.scenario.length); // 예측 끝
+        const futureEnd = this.getNextTradingDay(lastTime, result.scenario.length + 10); // 여유 여백 추가
 
         this.chart.timeScale().setVisibleRange({
             from: oneYearAgo as any,

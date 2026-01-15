@@ -8,8 +8,10 @@
                 <div class="stock-title">
                     <h2>{{ currentSymbol() }}</h2>
                     <div class="stock-price-info">
-                        <span class="price">139,500</span>
-                        <span class="change up">+1.38%</span>
+                        <span class="price">{{ currentPrice() | number }}</span>
+                        <span class="change" [class.up]="priceChange().isUp" [class.down]="!priceChange().isUp">
+                            {{ priceChange().isUp ? '+' : '-' }}{{ priceChange().percent | number:'1.2-2' }}%
+                        </span>
                     </div>
                 </div>
                 <div class="sector-tags">

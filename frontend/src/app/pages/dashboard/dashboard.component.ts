@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -32,6 +32,26 @@ export class DashboardComponent implements OnInit {
     predictionData = signal<PredictionResult | null>(null);
     isLoading = signal(false);
 
+    currentPrice = computed(() => {
+        const data = this.predictionData();
+        if (!data || data.history.length === 0) return 0;
+        return data.history[data.history.length - 1].close;
+    });
+
+    priceChange = computed(() => {
+        const data = this.predictionData();
+        if (!data || data.history.length < 2) return { value: 0, percent: 0, isUp: true };
+        const last = data.history[data.history.length - 1].close;
+        const prev = data.history[data.history.length - 2].close;
+        const diff = last - prev;
+        const percent = (diff / prev) * 100;
+        return {
+            value: Math.abs(diff),
+            percent: Math.abs(percent),
+            isUp: diff >= 0
+        };
+    });
+
     constructor(private stockService: StockService, public authService: AuthService) { }
 
     ngOnInit() {
@@ -40,18 +60,20 @@ export class DashboardComponent implements OnInit {
 
     async selectSymbol(symbol: string) {
         this.currentSymbol.set(symbol);
-        await this.loadData();
+        this.loadData();
     }
 
-    private async loadData() {
+    private loadData() {
         this.isLoading.set(true);
-        try {
-            const result = await this.stockService.getStockData(this.currentSymbol());
-            this.predictionData.set(result);
-        } catch (error) {
-            console.error('Error loading data:', error);
-        } finally {
-            this.isLoading.set(false);
-        }
+        this.stockService.getAnalysis(this.currentSymbol()).subscribe({
+            next: (result) => {
+                this.predictionData.set(result);
+                this.isLoading.set(false);
+            },
+            error: (error) => {
+                console.error('Error loading data:', error);
+                this.isLoading.set(false);
+            }
+        });
     }
 }

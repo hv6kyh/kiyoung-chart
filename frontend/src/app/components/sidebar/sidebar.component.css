@@ -67,6 +67,20 @@
     color: var(--primary-color);
 }
 
+.metric-item.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.comment-text {
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    word-break: keep-all;
+    font-weight: 500;
+}
+
 .card-header-row {
     display: flex;
     justify-content: space-between;
