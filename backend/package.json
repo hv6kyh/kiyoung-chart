@@ -5,7 +5,10 @@
     "scripts": {
         "dev": "tsx watch src/server.ts",
         "build": "tsc",
-        "start": "node dist/server.js"
+        "start": "node dist/server.js",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+        "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
     },
     "dependencies": {
         "cors": "^2.8.5",
@@ -16,7 +19,10 @@
     "devDependencies": {
         "@types/cors": "^2.8.17",
         "@types/express": "^5.0.0",
+        "@types/jest": "^30.0.0",
         "@types/node": "^20.0.0",
+        "jest": "^30.2.0",
+        "ts-jest": "^29.4.6",
         "tsx": "^4.0.0",
         "typescript": "^5.0.0"
     }

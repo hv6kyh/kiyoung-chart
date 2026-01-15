@@ -211,7 +211,7 @@
 ### Phase 1 시작 전
 - [x] [phase1-volume-and-weights.md](./phase1-volume-and-weights.md) 정독
 - [x] Yahoo Finance API volume 데이터 확인
-- [ ] Jest 테스트 환경 구축
+- [x] Jest 테스트 환경 구축
 
 ### Phase 1 완료 후
 - [x] 모든 Phase 1 테스트 통과
