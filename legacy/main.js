@@ -225,8 +225,8 @@ function runPrediction(data) {
     return { predictions, matches }; // matches 함께 반환
 }
 
-// --- 기영이 패턴 탐지 (Feature Engineering) ---
-function detectKiyoungPattern(data) {
+// --- 주린이 패턴 탐지 (Feature Engineering) ---
+function detectJurineePattern(data) {
     // 기획: 급등(왼쪽 얼굴) -> 고점에서의 3회 이상 미세 파동(머리 뾰족이) -> 하락 징후
     const recent = data.slice(-20);
     const prices = recent.map(d => d.close);
@@ -250,25 +250,25 @@ function updateCommentary(data, predictionsObj) {
     const firstPrice = data[data.length - 15].close;
     const trend = lastPrice > firstPrice ? '상승' : '하락';
     const predTrend = predictions[predictions.length - 1].value > lastPrice ? '상승' : '하락';
-    const isKiyoungHair = detectKiyoungPattern(data);
+    const isJurineeHair = detectJurineePattern(data);
 
     let msg = "";
     if (isKiyoungHair) {
-        msg = "앗! **기영이 머리 패턴**이 감지되었습니다! 초보자들은 뾰족한 머리카락에 찔리지 않게 조심해야 해요. 곧 오른쪽 팔(급락)이 나올 수도 있으니 주의하세요!";
+        msg = "앗! **주린이 머리 패턴**이 감지되었습니다! 초보자들은 뾰족한 머리카락에 찔리지 않게 조심해야 해요. 곧 오른쪽 팔(급락)이 나올 수도 있으니 주의하세요!";
     } else if (trend === '상승' && predTrend === '상승') {
-        msg = "기영이가 머리카락을 꼿꼿이 세웠네요! 기세가 좋습니다. 바나나를 먹으며 즐겁게 기다려봐도 좋겠어요.";
+        msg = "주린이가 머리카락을 꼿꼿이 세웠네요! 기세가 좋습니다. 바나나를 먹으며 즐겁게 기다려봐도 좋겠어요.";
     } else if (trend === '하락' && predTrend === '상승') {
-        msg = "기영이가 머리를 긁적이고 있어요. 역전의 찬스가 올지도? 무릎에서 사서 어깨에서 판다는 말을 기억하세요!";
+        msg = "주린이가 머리를 긁적이고 있어요. 역전의 찬스가 올지도? 무릎에서 사서 어깨에서 판다는 말을 기억하세요!";
     } else if (predTrend === '하락') {
-        msg = "기영이가 눈물을 흘리며 퇴근하고 있어요. 잠시 관망할까요? 억지로 매수하면 기영이 머리처럼 뾰족해질지도 몰라요.";
+        msg = "주린이가 눈물을 흘리며 퇴근하고 있어요. 잠시 관망할까요? 억지로 매수하면 주린이 머리처럼 뾰족해질지도 몰라요.";
     } else {
-        msg = "기영이가 멍하니 차트를 보고 있네요. 방향성이 애매할 때는 기영이처럼 맛있는 거 먹으러 가는 게 최고입니다.";
+        msg = "주린이가 멍하니 차트를 보고 있네요. 방향성이 애매할 때는 주린이처럼 맛있는 거 먹으러 가는 게 최고입니다.";
     }
 
     commentaryBox.innerHTML = `
         <div class="commentary-content">
-            <div class="kiyoung-avatar">
-                <img src="/kiyoung.png" alt="기영이" width="60">
+            <div class="jurinee-avatar">
+                <img src="/kiyoung.png" alt="주린이" width="60">
             </div>
             <p>${msg}</p>
         </div>
@@ -307,7 +307,7 @@ function updateCommentary(data, predictionsObj) {
             position: 'aboveBar',
             color: '#f2cc60',
             shape: 'arrowUp',
-            text: '기영이 머리!',
+            text: '주린이 머리!',
         }
     ]);
 

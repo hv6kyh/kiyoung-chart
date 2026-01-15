@@ -1,25 +1,34 @@
-<aside class="stock-sidebar glass" [class.collapsed]="isCollapsed()">
+<aside class="stock-sidebar" [class.collapsed]="isCollapsed()">
     <div class="sidebar-header">
-        <h2 *ngIf="!isCollapsed()">종목 선택</h2>
-        <button class="toggle-btn" (click)="toggleSidebar()" [title]="isCollapsed() ? '펼치기' : '접기'">
+        <h2 *ngIf="!isCollapsed()">관심 종목</h2>
+        <button class="btn-toggle" (click)="toggleSidebar()" [title]="isCollapsed() ? '펼치기' : '접기'">
             {{ isCollapsed() ? '▶' : '◀' }}
         </button>
     </div>
 
-    <nav class="stock-list" *ngIf="!isCollapsed()">
-        <button *ngFor="let stock of stocks()" class="stock-item" [class.active]="selectedStock() === stock.code"
+    <nav class="stock-list">
+        <div *ngFor="let stock of stocks()" class="stock-item" [class.active]="selectedStock() === stock.code"
             (click)="selectStock(stock.code)">
-            <span class="stock-icon">{{ stock.icon }}</span>
-            <div class="stock-info">
-                <span class="stock-name">{{ stock.name }}</span>
-                <span class="stock-code">{{ stock.code }}</span>
+            <div class="stock-main">
+                <span class="stock-icon">{{ stock.icon }}</span>
+                <div class="stock-info" *ngIf="!isCollapsed()">
+                    <div class="stock-name-row">
+                        <span class="stock-name">{{ stock.name }}</span>
+                        <span class="stock-tag">{{ stock.sector }}</span>
+                    </div>
+                    <span class="stock-code">{{ stock.code }}</span>
+                </div>
             </div>
-        </button>
+            <div class="stock-metrics" *ngIf="!isCollapsed()">
+                <span class="price">{{ stock.price }}</span>
+                <span class="change" [class.up]="stock.isUp" [class.down]="!stock.isUp">{{ stock.change }}</span>
+            </div>
+        </div>
     </nav>
 
     <div class="sidebar-footer" *ngIf="!isCollapsed()">
-        <button class="add-stock-btn" routerLink="/stocks/add">
-            <span>➕</span>
+        <button class="btn-add" (click)="onAddStock()">
+            <span class="add-icon">+</span>
             <span>종목 추가</span>
         </button>
     </div>

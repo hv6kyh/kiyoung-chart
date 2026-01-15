@@ -1,0 +1,180 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--bg-color);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+.main-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.chart-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.stock-title h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.stock-price-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.change {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.change.up {
+    color: var(--positive-color);
+}
+
+.change.down {
+    color: var(--negative-color);
+}
+
+.sector-tags {
+    display: flex;
+    gap: 8px;
+}
+
+.tag {
+    padding: 4px 10px;
+    background: #eef3ff;
+    color: var(--primary-color);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.chart-wrapper {
+    flex: 1;
+    min-height: 400px;
+    background: var(--content-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-wrapper app-chart {
+    flex: 1;
+    min-height: 0;
+}
+
+.prediction-overlay {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    padding: 6px 12px;
+    background: rgba(49, 130, 246, 0.1);
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.prediction-overlay .label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.analysis-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.summary-card {
+    background: var(--content-bg);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.summary-card .label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+}
+
+.summary-card .value {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.value.warning {
+    color: #f2994a;
+}
+
+.value.info {
+    color: var(--primary-color);
+}
+
+.value.high {
+    color: #27ae60;
+}
+
+/* Skeleton Styles */
+.skeleton-header {
+    height: 60px;
+    width: 300px;
+    background: #e5e8eb;
+    border-radius: var(--radius-sm);
+}
+
+.skeleton {
+    background: #e5e8eb;
+    min-height: 80px;
+}
+
+.pulse {
+    animation: pulse-kf 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-kf {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}

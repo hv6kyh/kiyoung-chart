@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 import { createChart, IChartApi, ISeriesApi, CandlestickData, CandlestickSeries } from 'lightweight-charts';
 import { OHLC } from '../../types/stock.types';
 
@@ -11,6 +11,12 @@ import { OHLC } from '../../types/stock.types';
 export class MiniChartComponent implements AfterViewInit, OnDestroy, OnChanges {
     @ViewChild('chartContainer') chartContainer!: ElementRef;
     @Input() data: OHLC[] = [];
+    @Input() width: number = 300;
+    @Input() height: number = 150;
+
+    @HostBinding('style.width.px') get hostWidth() { return this.width; }
+    @HostBinding('style.height.px') get hostHeight() { return this.height; }
+    @HostBinding('style.display') display = 'block';
 
     private chart!: IChartApi;
     private candleSeries!: ISeriesApi<'Candlestick'>;
@@ -31,33 +37,37 @@ export class MiniChartComponent implements AfterViewInit, OnDestroy, OnChanges {
     private initChart() {
         this.chart = createChart(this.chartContainer.nativeElement, {
             layout: {
-                background: { type: 'solid' as any, color: 'transparent' },
-                textColor: '#d1d4dc'
+                background: { type: 'solid' as any, color: '#ffffff' },
+                textColor: '#4E5968'
             },
             grid: {
-                vertLines: { color: 'rgba(42, 46, 57, 0.3)' },
-                horzLines: { color: 'rgba(42, 46, 57, 0.3)' }
+                vertLines: { color: '#E8EBF0' },
+                horzLines: { color: '#E8EBF0' }
             },
             rightPriceScale: {
                 borderVisible: false,
-                scaleMargins: { top: 0.1, bottom: 0.1 }
+                scaleMargins: { top: 0.15, bottom: 0.15 }
             },
             timeScale: {
                 borderVisible: false,
                 visible: true,
-                timeVisible: false,
+                timeVisible: true,
                 secondsVisible: false
             },
-            width: 300,
-            height: 150,
+            width: this.width,
+            height: this.height,
         });
 
         this.candleSeries = this.chart.addSeries(CandlestickSeries, {
             upColor: '#ef5350',
             downColor: '#26a69a',
-            borderVisible: false,
+            borderVisible: true,
+            borderUpColor: '#ef5350',
+            borderDownColor: '#26a69a',
             wickUpColor: '#ef5350',
             wickDownColor: '#26a69a',
+            priceLineVisible: false,
+            lastValueVisible: false,
         });
     }
 

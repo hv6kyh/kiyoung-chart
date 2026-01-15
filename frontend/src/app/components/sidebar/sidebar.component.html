@@ -1,32 +1,59 @@
-<div class="sidebar-container glass">
-    <section class="diagnosis-card card">
-        <h3>기영이의 진단</h3>
-        <div class="diagnosis-content">
-            <div class="kiyoung-avatar">Banana</div>
-            <p>{{ diagnosisMessage() }}</p>
-        </div>
-    </section>
-
-    <section class="matches-card card">
-        <h3>예측 근거 (Past Matches)</h3>
-        <div class="matches-list">
-            @for (match of data()?.matches; track match.date; let i = $index) {
-            <div class="match-item glass-dark" (mouseenter)="showTooltip(match, $event)" (mouseleave)="hideTooltip()">
-                <span class="match-date">과거: {{ match.date }}</span>
-                <span class="match-corr">종합 유사도: {{ (match.correlation * 100) | number:'1.1-1' }}%</span>
+<div class="sidebar-wrapper">
+    <div class="sidebar-container">
+        <div class="card data-summary-card">
+            <h3 class="card-title">데이터 통합 분석</h3>
+            <div class="metric-container">
+                <div class="metric-item">
+                    <span class="m-label">RSI 코멘트</span>
+                    <span class="m-value warning">과매수 구간 진입 중</span>
+                </div>
+                <div class="metric-item">
+                    <span class="m-label">패턴 유사도</span>
+                    <span class="m-value high">94.2% 일치</span>
+                </div>
+                <div class="metric-item">
+                    <span class="m-label">매칭 케이스</span>
+                    <span class="m-value">2,481건 발견</span>
+                </div>
             </div>
-            } @empty {
-            <p class="empty-msg">데이터 분석 중...</p>
-            }
         </div>
-    </section>
 
-    @if (tooltipVisible()) {
-    <div class="tooltip-container" [style.top.px]="tooltipPosition().y" [style.left.px]="tooltipPosition().x">
-        <div class="tooltip-header">
-            <span>{{ tooltipData()?.date }} 패턴</span>
+        <div class="card matches-card">
+            <div class="card-header-row">
+                <h3 class="card-title">근거 매칭 (Pattern Proof)</h3>
+                <span class="info-icon" title="과거 수만 개의 데이터 중 현재와 가장 유사한 구간들입니다.">ⓘ</span>
+            </div>
+            <div class="matches-list">
+                @for (match of data()?.matches; track match.date; let i = $index) {
+                <div class="match-item" (click)="openProof(match)" (mouseenter)="onMatchHover($event, match)"
+                    (mouseleave)="onMatchHover($event, null)">
+                    <div class="match-info">
+                        <span class="match-date">{{ match.date }} <small>의 흐름</small></span>
+                        <span class="match-badge" [class.high]="match.correlation > 0.8">
+                            {{ ((match.correlation * 100) | number:'1.1-1') + '%' }} 일치
+                        </span>
+                    </div>
+                    <div class="match-action">증명 보기 ></div>
+                </div>
+                } @empty {
+                <div class="empty-msg">
+                    <div class="loader-dots"><span></span><span></span><span></span></div>
+                    데이터 분석 중...
+                </div>
+                }
+            </div>
         </div>
-        <app-mini-chart [data]="tooltipData()?.windowData || []"></app-mini-chart>
+    </div>
+
+    <!-- Hover Tooltip (Outside scrollable container) -->
+    @if (hoveredMatch(); as match) {
+    <div class="match-tooltip" [style.top.px]="tooltipY()">
+        <div class="tooltip-header">
+            <span class="tooltip-date">{{ match.date }}</span>
+            <span class="tooltip-correlation">{{ ((match.correlation * 100) | number:'1.1-1') }}% 일치</span>
+        </div>
+        <app-mini-chart [data]="match.windowData" [width]="280" [height]="160">
+        </app-mini-chart>
     </div>
     }
 </div>

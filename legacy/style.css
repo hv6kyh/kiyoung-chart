@@ -139,7 +139,7 @@ main {
     animation: slideIn 0.5s ease-out;
 }
 
-.kiyoung-avatar {
+.jurinee-avatar {
     flex-shrink: 0;
     background: rgba(242, 204, 96, 0.1);
     border-radius: 50%;
@@ -148,7 +148,7 @@ main {
     box-shadow: 0 0 15px rgba(242, 204, 96, 0.2);
 }
 
-.kiyoung-avatar img {
+.jurinee-avatar img {
     display: block;
 }
 

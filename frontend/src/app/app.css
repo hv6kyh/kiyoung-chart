@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: #131722;
-    color: white;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-primary);
+    font-family: inherit;
     overflow: hidden;
 }
 
@@ -37,32 +37,33 @@
 
 .prediction-sidebar {
     width: 320px;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid var(--border-color);
     overflow-y: auto;
     flex-shrink: 0;
+    background: var(--content-bg);
 }
 
 /* 스크롤바 스타일링 */
 .chart-section::-webkit-scrollbar,
 .prediction-sidebar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 
 .chart-section::-webkit-scrollbar-track,
 .prediction-sidebar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
 }
 
 .chart-section::-webkit-scrollbar-thumb,
 .prediction-sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
+    background: var(--border-color);
+    border-radius: 10px;
 }
 
 .chart-section::-webkit-scrollbar-thumb:hover,
 .prediction-sidebar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--text-tertiary);
 }
 
 /* 반응형 디자인 */
@@ -80,7 +81,7 @@
     .prediction-sidebar {
         width: 100%;
         border-left: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid var(--p-surface-200);
         max-height: 300px;
     }
 }

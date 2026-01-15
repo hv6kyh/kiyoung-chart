@@ -1,18 +1,21 @@
-<header class="app-header glass">
+<header class="app-header">
     <div class="header-content">
-        <h1>
-            <span class="logo">📈</span>
-            기영이 차트
-            <!-- <small>Enterprise v20</small> -->
+        <h1 class="logo-area" routerLink="/" style="cursor: pointer;">
+            <span class="logo-icon">📈</span>
+            <span class="logo-text">주린이 차트</span>
         </h1>
+        <nav class="header-nav">
+            <a routerLink="/chart" routerLinkActive="active" class="nav-item">차트 분석</a>
+            <a routerLink="/stock-qna" routerLinkActive="active" class="nav-item">주식 무물보</a>
+        </nav>
         <div class="header-actions">
             @if (!authService.isLoggedIn()) {
-            <button class="auth-btn" (click)="authService.openModal('login')">로그인</button>
-            <button class="auth-btn signup" (click)="authService.openModal('signup')">회원가입</button>
+            <button class="btn-text" (click)="authService.openModal('login')">로그인</button>
+            <button class="btn-primary" (click)="authService.openModal('signup')">회원가입</button>
             } @else {
-            <button class="icon-btn" title="알림">🔔</button>
-            <button class="icon-btn" title="설정">⚙️</button>
-            <button class="icon-btn logout" (click)="authService.logout()" title="로그아웃">🚪</button>
+            <button class="btn-icon" title="알림">🔔</button>
+            <button class="btn-icon" title="설정">⚙️</button>
+            <button class="btn-icon btn-logout" (click)="authService.logout()" title="로그아웃">🚪</button>
             }
         </div>
     </div>

@@ -9,7 +9,6 @@ export const authGuard: CanActivateFn = (route, state) => {
         return true;
     }
 
-    // If not logged in, open the auth modal and prevent navigation
-    authService.openModal('login');
+    // If not logged in, prevent navigation. Modal will be opened by UI actions.
     return false;
 };

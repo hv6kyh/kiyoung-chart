@@ -1,92 +1,120 @@
 .app-header {
-  padding: 16px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 24px;
+  background-color: var(--content-bg);
+  border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
 }
 
 .header-content {
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-h1 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+.logo-area {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: white;
+  gap: 8px;
+  margin: 0;
+  cursor: pointer;
 }
 
-.logo {
-  font-size: 28px;
+.logo-icon {
+  font-size: 24px;
 }
 
-small {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.6);
-  margin-left: 8px;
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .header-actions {
   display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.icon-btn {
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 18px;
-  transition: all 0.3s ease;
+.header-nav {
+  display: flex;
+  gap: 24px;
+  margin-left: 40px;
+  flex: 1;
 }
 
-.icon-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.glass {
-  background: rgba(19, 23, 34, 0.95);
-  backdrop-filter: blur(10px);
-}
-
-.auth-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.auth-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.auth-btn.signup {
-  background: #00ff88;
-  color: #002e1c;
-  border: none;
+.nav-item {
+  text-decoration: none;
+  font-size: 15px;
   font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
 }
 
-.auth-btn.signup:hover {
-  background: #00e67a;
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+.nav-item:hover {
+  color: var(--primary-color);
 }
 
-.logout:hover {
-  background: rgba(255, 59, 48, 0.2);
+.nav-item.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+/* Button Styles */
+button {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-text:hover {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(49, 130, 246, 0.2);
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  font-size: 18px;
+  border-radius: 50%;
+}
+
+.btn-icon:hover {
+  background-color: var(--bg-color);
+}
+
+.btn-logout:hover {
+  background-color: #fff0f0;
 }
