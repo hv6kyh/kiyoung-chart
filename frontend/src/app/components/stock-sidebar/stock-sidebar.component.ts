@@ -30,8 +30,8 @@ export class StockSidebarComponent {
   stocks = signal<StockSymbol[]>([
     { code: '005930.KS', name: '삼성전자', icon: '📱', price: '72,100', change: '+1.38%', isUp: true, sector: '반도체' },
     { code: '000660.KS', name: 'SK하이닉스', icon: '💾', price: '182,200', change: '-2.45%', isUp: false, sector: '반도체' },
-    { code: 'TSLA', name: '테슬라', icon: '🚗', price: '258.80', change: '+4.20%', isUp: true, sector: 'AI' },
-    { code: 'NVDA', name: '엔비디아', icon: '🎮', price: '128.50', change: '+1.15%', isUp: true, sector: 'AI' },
+    { code: 'AAPL', name: '애플', icon: '🍎', price: '258.80', change: '+4.20%', isUp: true, sector: 'M7' },
+    { code: 'GOOGL', name: '구글', icon: '💻', price: '128.50', change: '+1.15%', isUp: true, sector: 'M7' },
   ]);
 
   toggleSidebar() {

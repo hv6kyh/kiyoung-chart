@@ -381,10 +381,18 @@ export class EngineService {
                 confidence68Upper[step] = mean + stdDev;
                 confidence68Lower[step] = mean - stdDev;
 
-                // 95% 신뢰구간 (±2 표준편차)
+                // 95% 신뢰구간도 동일하게 계산 (±2 표준편차)
                 confidence95Upper[step] = mean + 2 * stdDev;
                 confidence95Lower[step] = mean - 2 * stdDev;
             }
+        } else {
+            // 매칭 결과가 없을 경우 현재 가격으로 수평선 유지 (0으로 급락 방지)
+            const currentPrice = targetWindow[targetWindow.length - 1].close;
+            scenario.fill(currentPrice);
+            confidence68Upper.fill(currentPrice);
+            confidence68Lower.fill(currentPrice);
+            confidence95Upper.fill(currentPrice);
+            confidence95Lower.fill(currentPrice);
         }
 
         return {
@@ -459,62 +467,95 @@ export class EngineService {
         medium: PredictionResult,
         long: PredictionResult
     ): PredictionResult {
-        // 가중치: 단기 20%, 중기 50%, 장기 30%
-        const weights = { short: 0.2, medium: 0.5, long: 0.3 };
+        // 기본 가중치: 단기 20%, 중기 50%, 장기 30%
+        const baseWeights = { short: 0.2, medium: 0.5, long: 0.3 };
 
-        // 중기 예측 길이를 기준으로 사용 (10일)
-        const predictionSize = medium.scenario.length;
+        // 유효한(매칭 패턴이 존재하는) 타임프레임 확인
+        const isShortValid = short.matches.length > 0;
+        const isMediumValid = medium.matches.length > 0;
+        const isLongValid = long.matches.length > 0;
+
+        // 유효한 타임프레임의 가중치 합계 계산
+        let totalEffectiveWeight = 0;
+        if (isShortValid) totalEffectiveWeight += baseWeights.short;
+        if (isMediumValid) totalEffectiveWeight += baseWeights.medium;
+        if (isLongValid) totalEffectiveWeight += baseWeights.long;
+
+        // 중기 예측 길이를 기준으로 사용 (10일), 만약 중기가 없으면 가능한 것 중 최대 길이
+        const predictionSize = medium.scenario.length || short.scenario.length || long.scenario.length || 10;
         const scenario = new Array(predictionSize).fill(0);
         const confidence68Upper = new Array(predictionSize).fill(0);
         const confidence68Lower = new Array(predictionSize).fill(0);
         const confidence95Upper = new Array(predictionSize).fill(0);
         const confidence95Lower = new Array(predictionSize).fill(0);
 
-        for (let step = 0; step < predictionSize; step++) {
-            // 단기는 5일까지만 데이터 있음
-            const shortValue = step < short.scenario.length ? short.scenario[step] : medium.scenario[step];
-            const shortUpper68 = step < short.confidence68Upper.length ? short.confidence68Upper[step] : medium.confidence68Upper[step];
-            const shortLower68 = step < short.confidence68Lower.length ? short.confidence68Lower[step] : medium.confidence68Lower[step];
-
-            // 장기는 15일까지 데이터 있음
-            const longValue = step < long.scenario.length ? long.scenario[step] : medium.scenario[step];
-            const longUpper68 = step < long.confidence68Upper.length ? long.confidence68Upper[step] : medium.confidence68Upper[step];
-            const longLower68 = step < long.confidence68Lower.length ? long.confidence68Lower[step] : medium.confidence68Lower[step];
-
-            // 가중 평균
-            scenario[step] =
-                shortValue * weights.short +
-                medium.scenario[step] * weights.medium +
-                longValue * weights.long;
-
-            confidence68Upper[step] =
-                shortUpper68 * weights.short +
-                medium.confidence68Upper[step] * weights.medium +
-                longUpper68 * weights.long;
-
-            confidence68Lower[step] =
-                shortLower68 * weights.short +
-                medium.confidence68Lower[step] * weights.medium +
-                longLower68 * weights.long;
-
-            // 95% 신뢰구간도 동일하게 계산
-            const shortUpper95 = step < short.confidence95Upper.length ? short.confidence95Upper[step] : medium.confidence95Upper[step];
-            const shortLower95 = step < short.confidence95Lower.length ? short.confidence95Lower[step] : medium.confidence95Lower[step];
-            const longUpper95 = step < long.confidence95Upper.length ? long.confidence95Upper[step] : medium.confidence95Upper[step];
-            const longLower95 = step < long.confidence95Lower.length ? long.confidence95Lower[step] : medium.confidence95Lower[step];
-
-            confidence95Upper[step] =
-                shortUpper95 * weights.short +
-                medium.confidence95Upper[step] * weights.medium +
-                longUpper95 * weights.long;
-
-            confidence95Lower[step] =
-                shortLower95 * weights.short +
-                medium.confidence95Lower[step] * weights.medium +
-                longLower95 * weights.long;
+        // 모든 타임프레임이 무효할 경우 처리
+        if (totalEffectiveWeight === 0) {
+            const lastPrice = medium.history.length > 0 ? medium.history[medium.history.length - 1].close : 0;
+            return {
+                ...medium,
+                scenario: new Array(predictionSize).fill(lastPrice),
+                confidence68Upper: new Array(predictionSize).fill(lastPrice),
+                confidence68Lower: new Array(predictionSize).fill(lastPrice),
+                confidence95Upper: new Array(predictionSize).fill(lastPrice),
+                confidence95Lower: new Array(predictionSize).fill(lastPrice)
+            };
         }
 
-        // 중기 분석 결과를 베이스로 하되 시나리오만 교체
+        for (let step = 0; step < predictionSize; step++) {
+            let weightedSum = 0;
+            let weightedUpper68 = 0;
+            let weightedLower68 = 0;
+            let weightedUpper95 = 0;
+            let weightedLower95 = 0;
+
+            if (isShortValid && step < short.scenario.length) {
+                weightedSum += short.scenario[step] * baseWeights.short;
+                weightedUpper68 += short.confidence68Upper[step] * baseWeights.short;
+                weightedLower68 += short.confidence68Lower[step] * baseWeights.short;
+                weightedUpper95 += short.confidence95Upper[step] * baseWeights.short;
+                weightedLower95 += short.confidence95Lower[step] * baseWeights.short;
+            } else if (isShortValid) {
+                // 단기 데이터가 끝났으면 마지막 값 유지하여 가중치 기여
+                const lastIdx = short.scenario.length - 1;
+                weightedSum += short.scenario[lastIdx] * baseWeights.short;
+                weightedUpper68 += short.confidence68Upper[lastIdx] * baseWeights.short;
+                weightedLower68 += short.confidence68Lower[lastIdx] * baseWeights.short;
+                weightedUpper95 += short.confidence95Upper[lastIdx] * baseWeights.short;
+                weightedLower95 += short.confidence95Lower[lastIdx] * baseWeights.short;
+            }
+
+            if (isMediumValid && step < medium.scenario.length) {
+                weightedSum += medium.scenario[step] * baseWeights.medium;
+                weightedUpper68 += medium.confidence68Upper[step] * baseWeights.medium;
+                weightedLower68 += medium.confidence68Lower[step] * baseWeights.medium;
+                weightedUpper95 += medium.confidence95Upper[step] * baseWeights.medium;
+                weightedLower95 += medium.confidence95Lower[step] * baseWeights.medium;
+            }
+
+            if (isLongValid && step < long.scenario.length) {
+                weightedSum += long.scenario[step] * baseWeights.long;
+                weightedUpper68 += long.confidence68Upper[step] * baseWeights.long;
+                weightedLower68 += long.confidence68Lower[step] * baseWeights.long;
+                weightedUpper95 += long.confidence95Upper[step] * baseWeights.long;
+                weightedLower95 += long.confidence95Lower[step] * baseWeights.long;
+            } else if (isLongValid) {
+                const lastIdx = long.scenario.length - 1;
+                weightedSum += long.scenario[lastIdx] * baseWeights.long;
+                weightedUpper68 += long.confidence68Upper[lastIdx] * baseWeights.long;
+                weightedLower68 += long.confidence68Lower[lastIdx] * baseWeights.long;
+                weightedUpper95 += long.confidence95Upper[lastIdx] * baseWeights.long;
+                weightedLower95 += long.confidence95Lower[lastIdx] * baseWeights.long;
+            }
+
+            // 가중치 합계로 나누어 정규화
+            scenario[step] = weightedSum / totalEffectiveWeight;
+            confidence68Upper[step] = weightedUpper68 / totalEffectiveWeight;
+            confidence68Lower[step] = weightedLower68 / totalEffectiveWeight;
+            confidence95Upper[step] = weightedUpper95 / totalEffectiveWeight;
+            confidence95Lower[step] = weightedLower95 / totalEffectiveWeight;
+        }
+
         return {
             ...medium,
             scenario,
@@ -671,6 +712,14 @@ export class EngineService {
                 confidence95Upper[step] = mean + 2 * stdDev;
                 confidence95Lower[step] = mean - 2 * stdDev;
             }
+        } else {
+            // 매칭 결과가 없을 경우 현재 가격으로 수평선 유지
+            const currentPrice = targetWindow[targetWindow.length - 1].close;
+            scenario.fill(currentPrice);
+            confidence68Upper.fill(currentPrice);
+            confidence68Lower.fill(currentPrice);
+            confidence95Upper.fill(currentPrice);
+            confidence95Lower.fill(currentPrice);
         }
 
         return {

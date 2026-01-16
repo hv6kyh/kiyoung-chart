@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input, effect, input } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input, effect, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { createChart, IChartApi, ISeriesApi, LineStyle, CandlestickData, LineData, Time, CandlestickSeries, LineSeries, AreaSeries } from 'lightweight-charts';
 import { PredictionResult, OHLC } from '../../types/stock.types';
@@ -26,6 +26,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     private area68UpperSeries!: ISeriesApi<'Area'>;
     private area68LowerSeries!: ISeriesApi<'Area'>;
 
+    private isInitialized = signal(false);
+
     private resizeObserver?: ResizeObserver;
 
     data = input<PredictionResult | null>(null);
@@ -33,7 +35,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     constructor() {
         effect(() => {
             const result = this.data();
-            if (result && this.candleSeries) {
+            const initialized = this.isInitialized();
+            if (result && initialized && this.candleSeries) {
                 this.renderData(result);
             }
         });
@@ -42,6 +45,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         this.initChart();
         this.setupResizeObserver();
+        this.isInitialized.set(true);
     }
 
     private setupResizeObserver() {

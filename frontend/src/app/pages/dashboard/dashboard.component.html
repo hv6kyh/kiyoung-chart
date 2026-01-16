@@ -4,7 +4,16 @@
         <app-stock-sidebar (stockSelected)="selectSymbol($event)"></app-stock-sidebar>
 
         <main class="chart-section">
-            <div class="chart-header" *ngIf="predictionData(); else headerSkeleton">
+            <div class="analysis-modes">
+                <button class="mode-tab" [class.active]="analysisMode() === 'BASIC'"
+                    (click)="setAnalysisMode('BASIC')">기본 분석</button>
+                <button class="mode-tab" [class.active]="analysisMode() === 'MULTI'"
+                    (click)="setAnalysisMode('MULTI')">다중 시간 프레임</button>
+                <button class="mode-tab" [class.active]="analysisMode() === 'ADVANCED'"
+                    (click)="setAnalysisMode('ADVANCED')">정밀 분석 (DTW/ATR)</button>
+            </div>
+
+            <div class="chart-header" *ngIf="!isLoading() && predictionData(); else headerSkeleton">
                 <div class="stock-title">
                     <h2>{{ currentSymbol() }}</h2>
                     <div class="stock-price-info">
@@ -24,9 +33,27 @@
                 <div class="skeleton-header pulse"></div>
             </ng-template>
 
-            <div class="chart-wrapper">
+            <div class="chart-wrapper" *ngIf="!isLoading(); else chartSkeleton">
+                <div class="analysis-info-overlay" *ngIf="analysisMode() !== 'BASIC'">
+                    <div class="info-item" *ngIf="analysisMode() === 'MULTI' && multiTimeframeData()">
+                        <span class="label">종합 신뢰도</span>
+                        <span class="value grade" [class]="'grade-' + multiTimeframeData()?.confidence">
+                            {{ multiTimeframeData()?.confidence }}등급
+                        </span>
+                    </div>
+                    <div class="info-item" *ngIf="analysisMode() === 'ADVANCED'">
+                        <span class="tag small">DTW 보정</span>
+                        <span class="tag small">ATR 정규화</span>
+                    </div>
+                </div>
                 <app-chart [data]="predictionData()"></app-chart>
             </div>
+
+            <ng-template #chartSkeleton>
+                <div class="chart-wrapper skeleton pulse">
+                    <div class="skeleton-chart-line"></div>
+                </div>
+            </ng-template>
         </main>
 
         <app-sidebar [data]="predictionData()"></app-sidebar>

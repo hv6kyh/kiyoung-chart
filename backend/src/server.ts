@@ -8,6 +8,11 @@ const app = express();
 const PORT = 3000;
 const yahooFinance = new (YahooFinance as any)();
 const engine = new EngineService();
+const getStartDate = () => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - 5);
+    return d.toISOString().split('T')[0];
+};
 
 app.use(cors());
 
@@ -17,7 +22,7 @@ app.get('/api/stock/:symbol', async (req, res) => {
 
     try {
         const queryOptions = {
-            period1: '2024-01-01',
+            period1: getStartDate(),
             interval: '1d'
         };
         // Use any assertion to bypass library overload issues
@@ -60,7 +65,7 @@ app.get('/api/stock/:symbol/multi-timeframe', async (req, res) => {
 
     try {
         const queryOptions = {
-            period1: '2024-01-01',
+            period1: getStartDate(),
             interval: '1d'
         };
         const result = await (yahooFinance as any).chart(symbol, queryOptions);
@@ -107,7 +112,7 @@ app.get('/api/stock/:symbol/advanced', async (req, res) => {
 
     try {
         const queryOptions = {
-            period1: '2024-01-01',
+            period1: getStartDate(),
             interval: '1d'
         };
         const result = await (yahooFinance as any).chart(symbol, queryOptions);
