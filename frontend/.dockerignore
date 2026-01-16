@@ -1,0 +1,9 @@
+node_modules
+.angular
+dist
+.vscode
+.idea
+tests
+*.md
+.gitignore
+playwright.config.ts

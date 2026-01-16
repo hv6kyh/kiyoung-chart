@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
         "dynamic-time-warping": "^1.0.0",
         "express": "^5.0.0",
         "yahoo-finance2": "^3.11.2"

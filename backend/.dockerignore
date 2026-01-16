@@ -1,0 +1,8 @@
+node_modules
+dist
+.claude
+roadmap
+tests
+*.md
+.gitignore
+jest.config.js

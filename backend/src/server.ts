@@ -1,11 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import YahooFinance from 'yahoo-finance2';
+import dotenv from 'dotenv';
 import { EngineService } from './services/engine.service.js';
 import { OHLC } from './types/index.js';
 
+dotenv.config();
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const yahooFinance = new (YahooFinance as any)();
 const engine = new EngineService();
 const getStartDate = () => {

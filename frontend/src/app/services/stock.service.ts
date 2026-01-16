@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PredictionResult, MultiTimeframeResult } from '../types/stock.types';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StockService {
-    private baseUrl = 'http://localhost:3000/api';
+    private baseUrl = environment.apiUrl;
 
     constructor(private http: HttpClient) { }
 
