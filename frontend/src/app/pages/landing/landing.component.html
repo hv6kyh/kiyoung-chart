@@ -19,6 +19,10 @@
                     무료로 패턴 분석 시작하기
                     <span class="arrow">→</span>
                 </button>
+                <div class="hero-character-intro">
+                    <div class="char-bubble">"데이터로 읽으면 주식이 쉬워져요!"</div>
+                    <div class="jurinee-char hero-char"></div>
+                </div>
             </div>
         </div>
 
@@ -52,6 +56,7 @@
         <div class="comparison-grid">
             <div class="comparison-card human">
                 <div class="card-tag">일반적인 리딩</div>
+                <div class="char-icon confused-char"></div>
                 <h3>주관과 감각</h3>
                 <ul>
                     <li>유명인의 근거 없는 추천</li>
@@ -61,6 +66,7 @@
             </div>
             <div class="comparison-card data highlight">
                 <div class="card-tag primary">주린이 차트</div>
+                <div class="char-icon smart-char"></div>
                 <h3>데이터와 확률</h3>
                 <ul>
                     <li>수십만 건의 과거 패턴 매칭</li>
@@ -79,20 +85,52 @@
         <div class="infographic-container">
             <div class="step">
                 <div class="step-num">01</div>
+                <div class="char-mini extract-char"></div>
                 <h4>패턴 추출</h4>
-                <p>현재 차트의 캔들과 지표를 정밀한 벡터 데이터로 변환합니다.</p>
+                <p>현재 차트의 캔들과 지표를 정밀한 <strong>시계열 벡터 데이터(Time-Series Vector)</strong>로 변환합니다.</p>
             </div>
             <div class="step-arrow">→</div>
             <div class="step">
                 <div class="step-num">02</div>
+                <div class="char-mini matching-char"></div>
                 <h4>빅데이터 매칭</h4>
-                <p>전 세계 10개년치 주식 데이터에서 가장 유사한 시점을 찾아냅니다.</p>
+                <p>10년치 빅데이터에서 <strong>Hybrid 상관분석(Pearson + Spearman)</strong>으로 가장 유사한 시점을 찾아냅니다.</p>
             </div>
             <div class="step-arrow">→</div>
             <div class="step">
                 <div class="step-num">03</div>
+                <div class="char-mini scenario-char"></div>
                 <h4>시나리오 시각화</h4>
-                <p>과거의 흐름을 바탕으로 예측 가능한 미래 시나리오를 보여드립니다.</p>
+                <p>과거의 흐름을 바탕으로 <strong>신뢰 구간(68%/95% Cloud Band)</strong>이 포함된 시나리오를 제시합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Deep Dive -->
+    <section class="tech-deep-dive">
+        <div class="section-label">TECHNICAL DEEP DIVE</div>
+        <h2 class="section-title">주린이 차트가 데이터를 다루는 법</h2>
+
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-icon">📊</div>
+                <h4>Hybrid Correlation</h4>
+                <p>단순한 가격 흐름(Pearson)뿐만 아니라 추세의 순위(Spearman)와 거래량 상관관계까지 결합하여, 인간의 눈보다 정밀하게 패턴을 대조합니다.</p>
+            </div>
+            <div class="tech-card">
+                <div class="tech-icon">📐</div>
+                <h4>DTW Matching</h4>
+                <p><strong>Dynamic Time Warping</strong> 기술을 적용하여, 속도는 다르지만 모양이 유사한 '시간 왜곡' 패턴까지 완벽하게 잡아냅니다.</p>
+            </div>
+            <div class="tech-card">
+                <div class="tech-icon">🌊</div>
+                <h4>Volatility Normalization</h4>
+                <p><strong>ATR(Average True Range)</strong> 기반의 정규화를 통해 종목마다 다른 변동성을 표준화하여, 객관적인 비교 분석을 수행합니다.</p>
+            </div>
+            <div class="tech-card">
+                <div class="tech-icon">☁️</div>
+                <h4>Probabilistic Cloud</h4>
+                <p>단 하나의 선이 아닌, 통계적 확률 분포를 기반으로 한 <strong>신뢰 구름(Cloud Band)</strong>을 통해 리스크의 범위를 시각화합니다.</p>
             </div>
         </div>
     </section>
@@ -127,11 +165,23 @@
             </div>
             <div class="qna-visual-content">
                 <div class="mock-chat-window">
-                    <div class="chat-header">주식 무물보 AI</div>
+                    <div class="chat-header">
+                        <div class="jurinee-avatar"></div>
+                        <span>주식 무물보 AI</span>
+                    </div>
                     <div class="chat-body">
-                        <div class="msg bot">안녕하세요! 주식에 대해 궁금한 점을 물어보세요.</div>
-                        <div class="msg user">골든크로스가 무엇인가요?</div>
-                        <div class="msg bot">골든크로스는 단기 이평선이 장기 이평선을 위로 돌파할 때를 말하며, 강력한 상승 신호로...</div>
+                        <div class="msg bot">
+                            <div class="bot-profile"></div>
+                            <div class="msg-content">안녕하세요! 주식에 대해 궁금한 점을 물어보세요.</div>
+                        </div>
+                        <div class="msg user">
+                            <div class="msg-content">골든크로스가 무엇인가요?</div>
+                        </div>
+                        <div class="msg bot">
+                            <div class="bot-profile"></div>
+                            <div class="msg-content">골든크로스는 단기 이평선이 장기 이평선을 위로 돌파할 때를 말하며, 강력한 상승 신호로 해석될 수 있어요! 📈
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -145,9 +195,10 @@
             <h3>"이런 그림, 과거에도 진짜 있었습니다"</h3>
             <p>막연한 예측이 아닙니다. 과거의 실제 차트 기록을 하나하나 매칭하여 증거를 제시합니다. 당신의 선택에 확신을 더해줄 강력한 근거를 확인하세요.</p>
             <ul class="feature-list">
-                <li>✅ 90% 이상의 고정규 상관관계 매칭</li>
-                <li>✅ 실제 과거 일자 및 차트 데이터 공개</li>
-                <li>✅ 리스크 관리를 위한 신뢰 구간 제공</li>
+                <li>✅ Hybrid Correlation (Pearson + Spearman) 하이브리드 매칭</li>
+                <li>✅ DTW(Dynamic Time Warping) 기반 시간 왜곡 보정</li>
+                <li>✅ ATR 기반 변동성 정규화 및 가중치 분석</li>
+                <li>✅ 68%/95% 확률 분포 기반의 신뢰 구간(Cloud Band) 제공</li>
             </ul>
             <button class="btn-secondary" routerLink="/chart">분석 도구 둘러보기</button>
         </div>

@@ -108,6 +108,93 @@
     box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
 }
 
+.hero-character-intro {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.char-bubble {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-color);
+    position: relative;
+}
+
+.char-bubble::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 10px solid white;
+}
+
+.jurinee-char {
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    mix-blend-mode: multiply;
+    /* Helps hide white background if any */
+}
+
+.hero-char {
+    background-image: url('../../../assets/images/jurinee_char_hero.png');
+    width: 140px;
+    /* Hero char can be slightly larger */
+    height: 140px;
+}
+
+.char-icon {
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    margin-bottom: 20px;
+    mix-blend-mode: multiply;
+}
+
+.confused-char {
+    background-image: url('../../../assets/images/jurinee_char_confused.png');
+}
+
+.smart-char {
+    background-image: url('../../../assets/images/jurinee_char_smart.png');
+}
+
+.char-mini {
+    width: 80px;
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    margin: 0 auto 15px;
+    mix-blend-mode: multiply;
+}
+
+.extract-char {
+    background-image: url('../../../assets/images/jurinee_char_hero.png');
+}
+
+/* Reusing hero but scaled down */
+.matching-char {
+    background-image: url('../../../assets/images/jurinee_char_smart.png');
+}
+
+.scenario-char {
+    background-image: url('../../../assets/images/jurinee_char_hero.png');
+}
+
 .hero-visual {
     flex: 1;
     position: relative;
@@ -341,6 +428,66 @@
     font-weight: 800;
 }
 
+/* Technical Deep Dive */
+.tech-deep-dive {
+    max-width: 1200px;
+    margin: 120px auto;
+    padding: 0 40px;
+    text-align: center;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.tech-card {
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+    text-align: left;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.tech-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-color);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.06);
+}
+
+.tech-icon {
+    font-size: 32px;
+    margin-bottom: 24px;
+    width: 64px;
+    height: 64px;
+    background: #f8fbff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+}
+
+.tech-card h4 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.tech-card p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.tech-card strong {
+    color: var(--primary-color);
+}
+
 /* Feature Detail */
 .feature-detail {
     max-width: 1200px;
@@ -440,7 +587,141 @@
     position: relative;
 }
 
-/* Final CTA */
+/* Stock Q&A Intro */
+.qna-intro-section {
+    background: linear-gradient(135deg, #f8fbff 0%, #ffffff 100%);
+    padding: 120px 40px;
+}
+
+.qna-container-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+.qna-text-content {
+    flex: 1;
+}
+
+.qna-features {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.qna-feature-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.qna-feature-item .icon {
+    font-size: 24px;
+    padding: 12px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.qna-feature-item h4 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.qna-feature-item p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 15px;
+}
+
+.qna-visual-content {
+    flex: 1;
+}
+
+.mock-chat-window {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f4f8;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+
+.chat-header {
+    background: #f8fbff;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f4f8;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+}
+
+.jurinee-avatar {
+    width: 36px;
+    height: 36px;
+    background-image: url('../../../assets/images/jurinee_char_smart.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    image-rendering: pixelated;
+    background-color: white;
+    mix-blend-mode: multiply;
+}
+
+.chat-body {
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.msg {
+    display: flex;
+    gap: 12px;
+    max-width: 85%;
+}
+
+.msg.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.bot-profile {
+    width: 40px;
+    height: 40px;
+    background-image: url('../../../assets/images/jurinee_char_smart.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    mix-blend-mode: multiply;
+}
+
+.msg-content {
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.msg.bot .msg-content {
+    background: #f1f5f9;
+    color: var(--text-primary);
+    border-top-left-radius: 4px;
+}
+
+.msg.user .msg-content {
+    background: var(--primary-color);
+    color: white;
+    border-top-right-radius: 4px;
+}
+
 .final-cta {
     background: #f8fbff;
     padding: 160px 40px;
