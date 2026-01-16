@@ -1,7 +1,8 @@
-import { Component, signal, output } from '@angular/core';
+import { Component, signal, output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { StockService } from '../../services/stock.service';
 
 export interface StockSymbol {
   code: string;
@@ -20,19 +21,50 @@ export interface StockSymbol {
   templateUrl: './stock-sidebar.component.html',
   styleUrls: ['./stock-sidebar.component.css']
 })
-export class StockSidebarComponent {
+export class StockSidebarComponent implements OnInit {
   isCollapsed = signal(false);
   selectedStock = signal('005930.KS');
   stockSelected = output<string>();
 
-  constructor(public authService: AuthService, private router: Router) { }
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    private stockService: StockService
+  ) { }
 
   stocks = signal<StockSymbol[]>([
-    { code: '005930.KS', name: '삼성전자', icon: '📱', price: '72,100', change: '+1.38%', isUp: true, sector: '반도체' },
-    { code: '000660.KS', name: 'SK하이닉스', icon: '💾', price: '182,200', change: '-2.45%', isUp: false, sector: '반도체' },
-    { code: 'AAPL', name: '애플', icon: '🍎', price: '258.80', change: '+4.20%', isUp: true, sector: 'M7' },
-    { code: 'GOOGL', name: '구글', icon: '💻', price: '128.50', change: '+1.15%', isUp: true, sector: 'M7' },
+    { code: '005930.KS', name: '삼성전자', icon: '📱', price: '-', change: '-', isUp: true, sector: '반도체' },
+    { code: '000660.KS', name: 'SK하이닉스', icon: '💾', price: '-', change: '-', isUp: false, sector: '반도체' },
+    { code: 'AAPL', name: '애플', icon: '🍎', price: '-', change: '-', isUp: true, sector: 'M7' },
+    { code: 'GOOGL', name: '구글', icon: '💻', price: '-', change: '-', isUp: true, sector: 'M7' },
   ]);
+
+  ngOnInit() {
+    this.refreshQuotes();
+  }
+
+  refreshQuotes() {
+    const symbols = this.stocks().map(s => s.code);
+    this.stockService.getQuotes(symbols).subscribe({
+      next: (quotes) => {
+        this.stocks.update(currentStocks =>
+          currentStocks.map(stock => {
+            const quote = quotes.find(q => q.code === stock.code);
+            if (quote) {
+              return {
+                ...stock,
+                price: quote.price.toLocaleString(),
+                change: `${quote.change >= 0 ? '+' : ''}${quote.change.toFixed(2)}%`,
+                isUp: quote.isUp
+              };
+            }
+            return stock;
+          })
+        );
+      },
+      error: (err) => console.error('Failed to fetch quotes:', err)
+    });
+  }
 
   toggleSidebar() {
     this.isCollapsed.update(value => !value);

@@ -167,6 +167,38 @@ app.get('/api/stock/:symbol/advanced', async (req, res) => {
     }
 });
 
+// Phase 4: 시세 정보 조회 엔드포인트 (사이드바용)
+app.get('/api/stocks/quotes', async (req, res) => {
+    const symbolsQuery = req.query.symbols as string;
+    if (!symbolsQuery) {
+        return res.status(400).json({ error: 'Symbols are required' });
+    }
+
+    const symbols = symbolsQuery.split(',');
+    console.log(`[Backend TS] Fetching quotes for: ${symbols}`);
+
+    try {
+        // yahooFinance.quote는 단일 심볼 또는 배열을 받을 수 있음
+        const quotes = await (yahooFinance as any).quote(symbols);
+
+        // 배열이 아닌 경우 배열로 변환 (심볼이 하나인 경우 대응)
+        const quoteArray = Array.isArray(quotes) ? quotes : [quotes];
+
+        const formattedQuotes = quoteArray.map((quote: any) => ({
+            code: quote.symbol,
+            price: quote.regularMarketPrice,
+            change: quote.regularMarketChangePercent,
+            previousClose: quote.regularMarketPreviousClose,
+            isUp: quote.regularMarketChange >= 0
+        }));
+
+        res.json(formattedQuotes);
+    } catch (error: any) {
+        console.error(`[Backend TS] Quote Error: `, error);
+        res.status(500).json({ error: 'Internal Server Error', message: error.message });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`[Kiyoung Backend] Running at http://localhost:${PORT}`);
 });

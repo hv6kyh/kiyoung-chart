@@ -47,4 +47,10 @@ export class StockService {
         }
         return this.http.get<PredictionResult>(url);
     }
+
+    // 여러 주식 시세 조회
+    getQuotes(symbols: string[]): Observable<any[]> {
+        const symbolsStr = symbols.join(',');
+        return this.http.get<any[]>(`${this.baseUrl}/stocks/quotes?symbols=${symbolsStr}`);
+    }
 }
