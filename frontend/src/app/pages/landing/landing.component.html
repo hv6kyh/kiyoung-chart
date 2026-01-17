@@ -5,13 +5,13 @@
     <section class="hero-section">
         <div class="hero-bg-accent"></div>
         <div class="hero-content">
-            <div class="badge-new">NEW 패턴 매칭 시스템 v2.1</div>
+            <div class="badge-new">NEW 패턴 매칭 시스템 {{version}}</div>
             <h1 class="hero-title">
                 차트는 <span class="gradient-text">데이터</span>로 읽는 것입니다
             </h1>
             <p class="hero-subtitle">
                 근거 없는 추천, 유료 리딩방에 지치셨나요?<br>
-                주린이 차트는 수십만 개의 과거 데이터를 매칭하여 객관적인 시나리오를 제시합니다.
+                주린이 차트는 5년치 빅데이터를 매칭하여 객관적인 시나리오를 제시합니다.
             </p>
 
             <div class="cta-area">
@@ -28,13 +28,17 @@
 
         <div class="hero-visual">
             <div class="floating-card chart-preview">
-                <div class="chart-line-anim"></div>
-                <div class="match-badge">94.8% Match</div>
+                <div class="chart-line-anim">
+                    <div class="line-path"></div>
+                    <div class="cloud-band"></div>
+                    <div class="data-point"></div>
+                </div>
+                <div class="match-badge">{{matchRate}}% Match</div>
             </div>
             <div class="floating-card stats-preview">
                 <div class="stat-item">
-                    <span class="label">과거 유사 사례</span>
-                    <span class="value">1,240개 발견</span>
+                    <span class="label">5년 유사 사례</span>
+                    <span class="value">{{matchCount | number}}개 발견</span>
                 </div>
             </div>
         </div>
@@ -90,12 +94,6 @@
                 <p>현재 차트의 캔들과 지표를 정밀한 <strong>시계열 벡터 데이터(Time-Series Vector)</strong>로 변환합니다.</p>
             </div>
             <div class="step-arrow">→</div>
-            <div class="step">
-                <div class="step-num">02</div>
-                <div class="char-mini matching-char"></div>
-                <h4>빅데이터 매칭</h4>
-                <p>10년치 빅데이터에서 <strong>Hybrid 상관분석(Pearson + Spearman)</strong>으로 가장 유사한 시점을 찾아냅니다.</p>
-            </div>
             <div class="step-arrow">→</div>
             <div class="step">
                 <div class="step-num">03</div>
@@ -170,18 +168,12 @@
                         <span>주식 무물보 AI</span>
                     </div>
                     <div class="chat-body">
-                        <div class="msg bot">
-                            <div class="bot-profile"></div>
-                            <div class="msg-content">안녕하세요! 주식에 대해 궁금한 점을 물어보세요.</div>
-                        </div>
-                        <div class="msg user">
-                            <div class="msg-content">골든크로스가 무엇인가요?</div>
-                        </div>
-                        <div class="msg bot">
-                            <div class="bot-profile"></div>
-                            <div class="msg-content">골든크로스는 단기 이평선이 장기 이평선을 위로 돌파할 때를 말하며, 강력한 상승 신호로 해석될 수 있어요! 📈
+                        <ng-container *ngFor="let msg of chatHistory">
+                            <div class="msg" [class.bot]="msg.type === 'bot'" [class.user]="msg.type === 'user'">
+                                <div *ngIf="msg.type === 'bot'" class="bot-profile"></div>
+                                <div class="msg-content">{{msg.content}}</div>
                             </div>
-                        </div>
+                        </ng-container>
                     </div>
                 </div>
             </div>
