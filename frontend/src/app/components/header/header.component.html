@@ -1,7 +1,7 @@
 <header class="app-header">
     <div class="header-content">
         <h1 class="logo-area" routerLink="/" style="cursor: pointer;">
-            <span class="logo-icon">📈</span>
+            <lucide-angular name="trending-up" [size]="22" class="logo-icon"></lucide-angular>
             <span class="logo-text">주린이 차트</span>
         </h1>
         <nav class="header-nav">
@@ -13,9 +13,15 @@
             <button class="btn-text" (click)="authService.openModal('login')">로그인</button>
             <button class="btn-primary" (click)="authService.openModal('signup')">회원가입</button>
             } @else {
-            <button class="btn-icon" title="알림">🔔</button>
-            <button class="btn-icon" title="설정">⚙️</button>
-            <button class="btn-icon btn-logout" (click)="authService.logout()" title="로그아웃">🚪</button>
+            <button class="btn-icon" title="알림">
+                <lucide-angular name="bell" [size]="18"></lucide-angular>
+            </button>
+            <button class="btn-icon" title="설정">
+                <lucide-angular name="settings" [size]="18"></lucide-angular>
+            </button>
+            <button class="btn-icon btn-logout" (click)="authService.logout()" title="로그아웃">
+                <lucide-angular name="log-out" [size]="18"></lucide-angular>
+            </button>
             }
         </div>
     </div>

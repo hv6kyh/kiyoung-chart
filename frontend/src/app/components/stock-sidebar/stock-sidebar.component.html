@@ -1,35 +1,65 @@
 <aside class="stock-sidebar" [class.collapsed]="isCollapsed()">
     <div class="sidebar-header">
-        <h2 *ngIf="!isCollapsed()">관심 종목</h2>
+        @if (!isCollapsed()) {
+            <h2>관심 종목</h2>
+        }
         <button class="btn-toggle" (click)="toggleSidebar()" [title]="isCollapsed() ? '펼치기' : '접기'">
-            {{ isCollapsed() ? '▶' : '◀' }}
+            @if (isCollapsed()) {
+                <lucide-angular name="chevron-right" [size]="16"></lucide-angular>
+            } @else {
+                <lucide-angular name="chevron-left" [size]="16"></lucide-angular>
+            }
         </button>
     </div>
 
     <nav class="stock-list">
-        <div *ngFor="let stock of stocks()" class="stock-item" [class.active]="selectedStock() === stock.code"
-            (click)="selectStock(stock.code)">
-            <div class="stock-main">
-                <span class="stock-icon">{{ stock.icon }}</span>
-                <div class="stock-info" *ngIf="!isCollapsed()">
-                    <div class="stock-name-row">
-                        <span class="stock-name">{{ stock.name }}</span>
-                        <span class="stock-tag">{{ stock.sector }}</span>
-                    </div>
-                    <span class="stock-code">{{ stock.code }}</span>
+        @if (isLoadingQuotes()) {
+            @for (i of [1,2,3,4]; track i) {
+                <div class="stock-skeleton">
+                    <div class="skel-avatar skeleton-shimmer"></div>
+                    @if (!isCollapsed()) {
+                        <div class="skel-info">
+                            <div class="skel-name skeleton-shimmer"></div>
+                            <div class="skel-price skeleton-shimmer"></div>
+                        </div>
+                    }
                 </div>
-            </div>
-            <div class="stock-metrics" *ngIf="!isCollapsed()">
-                <span class="price">{{ stock.price }}</span>
-                <span class="change" [class.up]="stock.isUp" [class.down]="!stock.isUp">{{ stock.change }}</span>
-            </div>
-        </div>
+            }
+        } @else {
+            @for (stock of stocks(); track stock.code) {
+                <div class="stock-item" [class.active]="selectedStock() === stock.code"
+                    (click)="selectStock(stock.code)">
+                    <div class="stock-main">
+                        <div class="stock-avatar" [style.backgroundColor]="stock.color">
+                            {{ stock.shortName }}
+                        </div>
+                        @if (!isCollapsed()) {
+                            <div class="stock-info">
+                                <div class="stock-name-row">
+                                    <span class="stock-name">{{ stock.name }}</span>
+                                    <span class="stock-tag">{{ stock.sector }}</span>
+                                </div>
+                                <span class="stock-code">{{ stock.code }}</span>
+                            </div>
+                        }
+                    </div>
+                    @if (!isCollapsed()) {
+                        <div class="stock-metrics">
+                            <span class="price">{{ stock.price }}</span>
+                            <span class="change" [class.up]="stock.isUp" [class.down]="!stock.isUp">{{ stock.change }}</span>
+                        </div>
+                    }
+                </div>
+            }
+        }
     </nav>
 
-    <div class="sidebar-footer" *ngIf="!isCollapsed()">
-        <button class="btn-add" (click)="onAddStock()">
-            <span class="add-icon">+</span>
-            <span>종목 추가</span>
-        </button>
-    </div>
+    @if (!isCollapsed()) {
+        <div class="sidebar-footer">
+            <button class="btn-add" (click)="onAddStock()">
+                <lucide-angular name="plus" [size]="16"></lucide-angular>
+                <span>종목 추가</span>
+            </button>
+        </div>
+    }
 </aside>

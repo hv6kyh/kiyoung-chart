@@ -1,7 +1,7 @@
 import { Component, signal, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
 import { HeaderComponent } from '../../components/header/header.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { StockSidebarComponent } from '../../components/stock-sidebar/stock-sidebar.component';
 import { ChartComponent } from '../../components/chart/chart.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
@@ -16,16 +16,16 @@ import { PredictionResult, MultiTimeframeResult } from '../../types/stock.types'
     standalone: true,
     imports: [
         CommonModule,
+        LucideAngularModule,
         HeaderComponent,
-        FooterComponent,
         StockSidebarComponent,
         ChartComponent,
         SidebarComponent,
         AuthModalComponent,
-        MatchDetailModalComponent
+        MatchDetailModalComponent,
     ],
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.css']
+    styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
     currentSymbol = signal('005930.KS');
@@ -33,6 +33,23 @@ export class DashboardComponent implements OnInit {
     multiTimeframeData = signal<MultiTimeframeResult | null>(null);
     analysisMode = signal<'BASIC' | 'MULTI' | 'ADVANCED'>('BASIC');
     isLoading = signal(false);
+
+    private stockNameMap: Record<string, { name: string; sector: string }> = {
+        '005930.KS': { name: '삼성전자', sector: '반도체' },
+        '000660.KS': { name: 'SK하이닉스', sector: '반도체' },
+        'AAPL': { name: '애플', sector: 'M7' },
+        'GOOGL': { name: '구글', sector: 'M7' },
+    };
+
+    analysisModes = [
+        { key: 'BASIC' as const, label: '기본 분석', desc: '최근 15일 패턴 비교' },
+        { key: 'MULTI' as const, label: '다중 프레임', desc: '7/15/30일 종합 분석' },
+        { key: 'ADVANCED' as const, label: '정밀 분석', desc: 'DTW + ATR 보정' },
+    ];
+
+    currentStockInfo = computed(() =>
+        this.stockNameMap[this.currentSymbol()] || { name: this.currentSymbol(), sector: '' },
+    );
 
     currentPrice = computed(() => {
         const data = this.predictionData();
@@ -50,11 +67,14 @@ export class DashboardComponent implements OnInit {
         return {
             value: Math.abs(diff),
             percent: Math.abs(percent),
-            isUp: diff >= 0
+            isUp: diff >= 0,
         };
     });
 
-    constructor(private stockService: StockService, public authService: AuthService) { }
+    constructor(
+        private stockService: StockService,
+        public authService: AuthService,
+    ) {}
 
     ngOnInit() {
         this.loadData();
@@ -85,19 +105,19 @@ export class DashboardComponent implements OnInit {
                 error: (error) => {
                     console.error('Error loading data:', error);
                     this.isLoading.set(false);
-                }
+                },
             });
         } else if (mode === 'MULTI') {
             this.stockService.getMultiTimeframe(symbol).subscribe({
                 next: (result) => {
                     this.multiTimeframeData.set(result);
-                    this.predictionData.set(result.combined); // 차트에는 결합된 결과 표시
+                    this.predictionData.set(result.combined);
                     this.isLoading.set(false);
                 },
                 error: (error) => {
                     console.error('Error loading multi-timeframe data:', error);
                     this.isLoading.set(false);
-                }
+                },
             });
         } else if (mode === 'ADVANCED') {
             this.stockService.getAdvancedAnalysis(symbol, { useDTW: true, useATR: true }).subscribe({
@@ -109,7 +129,7 @@ export class DashboardComponent implements OnInit {
                 error: (error) => {
                     console.error('Error loading advanced data:', error);
                     this.isLoading.set(false);
-                }
+                },
             });
         }
     }

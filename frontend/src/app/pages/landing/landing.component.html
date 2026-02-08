@@ -1,66 +1,123 @@
-<div class="landing-container">
+<div class="landing">
     <app-header></app-header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-bg-accent"></div>
-        <div class="hero-content">
-            <div class="badge-new">NEW 패턴 매칭 시스템 {{version}}</div>
-            <h1 class="hero-title">
-                차트는 <span class="gradient-text">데이터</span>로 읽는 것입니다
-            </h1>
-            <p class="hero-subtitle">
-                근거 없는 추천, 유료 리딩방에 지치셨나요?<br>
-                주린이 차트는 5년치 빅데이터를 매칭하여 객관적인 시나리오를 제시합니다.
-            </p>
+    <!-- ═══════════════ HERO (dark) ═══════════════ -->
+    <section class="hero">
+        <div class="hero-grid-bg"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-glow hero-glow--cyan"></div>
 
-            <div class="cta-area">
-                <button class="btn-cta-premium" routerLink="/chart">
-                    무료로 패턴 분석 시작하기
-                    <span class="arrow">→</span>
-                </button>
-                <div class="hero-character-intro">
-                    <div class="char-bubble">"데이터로 읽으면 주식이 쉬워져요!"</div>
-                    <div class="jurinee-char hero-char"></div>
+        <div class="hero-inner">
+            <div class="hero-text">
+                <span class="hero-badge">
+                    <span class="badge-pulse"></span>
+                    NEW 패턴 매칭 엔진 {{version}}
+                </span>
+
+                <h1 class="hero-heading">
+                    차트는<br>
+                    <span class="text-gradient">데이터</span>로<br>
+                    읽는 것입니다
+                </h1>
+
+                <p class="hero-desc">
+                    근거 없는 추천, 유료 리딩방에 지치셨나요?<br>
+                    5년치 빅데이터를 매칭하여 객관적인 시나리오를 제시합니다.
+                </p>
+
+                <a class="btn-glow" routerLink="/chart">
+                    무료로 분석 시작하기
+                    <span class="btn-arrow">→</span>
+                </a>
+
+                <div class="hero-chips">
+                    <span class="chip">🔒 회원가입 불필요</span>
+                    <span class="chip">📊 5년 빅데이터</span>
+                    <span class="chip">💰 100% 무료</span>
+                </div>
+            </div>
+
+            <!-- Animated chart card -->
+            <div class="hero-visual">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <span class="chart-symbol">AAPL · Pattern Analysis</span>
+                        <span class="chart-match-pill">94.8% Match</span>
+                    </div>
+                    <div class="chart-body">
+                        <div class="chart-gridlines">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <div class="chart-candles">
+                            <div class="candle up"    style="--h:22;--mb:8;--i:0"></div>
+                            <div class="candle down"  style="--h:14;--mb:16;--i:1"></div>
+                            <div class="candle up"    style="--h:28;--mb:12;--i:2"></div>
+                            <div class="candle down"  style="--h:10;--mb:22;--i:3"></div>
+                            <div class="candle up"    style="--h:24;--mb:20;--i:4"></div>
+                            <div class="candle down"  style="--h:12;--mb:28;--i:5"></div>
+                            <div class="candle up"    style="--h:30;--mb:26;--i:6"></div>
+                            <div class="candle up"    style="--h:22;--mb:34;--i:7"></div>
+                            <div class="candle up"    style="--h:26;--mb:38;--i:8"></div>
+                            <div class="candle up"    style="--h:20;--mb:44;--i:9"></div>
+                        </div>
+                        <!-- cloud band prediction zone -->
+                        <div class="cloud-zone"></div>
+                        <div class="cloud-zone-dashed"></div>
+                    </div>
+                </div>
+                <!-- floating stat -->
+                <div class="floating-stat">
+                    <span class="fs-label">5년 유사 사례</span>
+                    <span class="fs-value">1,240<small>개 발견</small></span>
                 </div>
             </div>
         </div>
 
-        <div class="hero-visual">
-            <div class="floating-card chart-preview">
-                <div class="chart-line-anim">
-                    <div class="line-path"></div>
-                    <div class="cloud-band"></div>
-                    <div class="data-point"></div>
-                </div>
-                <div class="match-badge">{{matchRate}}% Match</div>
+        <div class="hero-fade"></div>
+    </section>
+
+    <!-- ═══════════════ STATS BAR ═══════════════ -->
+    <section class="stats-bar scroll-reveal stats-trigger">
+        <div class="stats-inner">
+            <div class="stat-block">
+                <span class="stat-num">{{matchRate}}%</span>
+                <span class="stat-label">평균 패턴 일치율</span>
             </div>
-            <div class="floating-card stats-preview">
-                <div class="stat-item">
-                    <span class="label">5년 유사 사례</span>
-                    <span class="value">{{matchCount | number}}개 발견</span>
-                </div>
+            <div class="stat-divider"></div>
+            <div class="stat-block">
+                <span class="stat-num">{{matchCount | number}}</span>
+                <span class="stat-label">유사 사례 발견</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-block">
+                <span class="stat-num">{{dataYears}}년</span>
+                <span class="stat-label">분석 데이터 기간</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-block">
+                <span class="stat-num">{{patternCount | number}}+</span>
+                <span class="stat-label">분석된 패턴 수</span>
             </div>
         </div>
     </section>
 
-    <!-- Trust Banner -->
-    <section class="trust-banner">
-        <div class="banner-content">
-            <span class="icon">🚫</span>
+    <!-- ═══════════════ TRUST BANNER ═══════════════ -->
+    <section class="trust-banner scroll-reveal">
+        <div class="trust-inner">
+            <span class="trust-icon">🚫</span>
             <p><strong>주린이 차트는 리딩방이나 유료 강의 판매가 아닙니다.</strong> 오직 과거 데이터를 기반으로 한 기술적 분석 도구만을 제공합니다.</p>
         </div>
     </section>
 
-    <!-- Why Us Section -->
-    <section class="why-us">
-        <div class="section-label">WHY JURINEE CHART</div>
-        <h2 class="section-title">주식 초보일수록 데이터가 필요합니다</h2>
-
-        <div class="comparison-grid">
-            <div class="comparison-card human">
-                <div class="card-tag">일반적인 리딩</div>
-                <div class="char-icon confused-char"></div>
+    <!-- ═══════════════ COMPARISON ═══════════════ -->
+    <section class="comparison scroll-reveal">
+        <div class="section-center">
+            <span class="eyebrow">WHY JURINEE CHART</span>
+            <h2 class="heading-lg">주식 초보일수록<br>데이터가 필요합니다</h2>
+        </div>
+        <div class="compare-grid">
+            <div class="compare-card compare-card--muted scroll-reveal">
+                <span class="compare-tag">일반적인 리딩</span>
                 <h3>주관과 감각</h3>
                 <ul>
                     <li>유명인의 근거 없는 추천</li>
@@ -68,9 +125,8 @@
                     <li>고가의 유료 강의 유도</li>
                 </ul>
             </div>
-            <div class="comparison-card data highlight">
-                <div class="card-tag primary">주린이 차트</div>
-                <div class="char-icon smart-char"></div>
+            <div class="compare-card compare-card--highlight scroll-reveal">
+                <span class="compare-tag tag-primary">주린이 차트</span>
                 <h3>데이터와 확률</h3>
                 <ul>
                     <li>수십만 건의 과거 패턴 매칭</li>
@@ -81,139 +137,202 @@
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works">
-        <div class="section-label">HOW IT WORKS</div>
-        <h2 class="section-title">데이터가 증명하는 3단계 분석</h2>
-
-        <div class="infographic-container">
-            <div class="step">
+    <!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+    <section class="how-section">
+        <div class="section-center scroll-reveal">
+            <span class="eyebrow">HOW IT WORKS</span>
+            <h2 class="heading-lg">데이터가 증명하는 3단계 분석</h2>
+        </div>
+        <div class="steps-row">
+            <div class="step scroll-reveal">
                 <div class="step-num">01</div>
-                <div class="char-mini extract-char"></div>
+                <div class="step-icon-area">
+                    <span class="step-emoji">📊</span>
+                </div>
                 <h4>패턴 추출</h4>
                 <p>현재 차트의 캔들과 지표를 정밀한 <strong>시계열 벡터 데이터(Time-Series Vector)</strong>로 변환합니다.</p>
             </div>
-            <div class="step-arrow">→</div>
-            <div class="step-arrow">→</div>
-            <div class="step">
+            <div class="step-connector scroll-reveal">
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none">
+                    <path d="M0 12h40m0 0l-8-8m8 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="step scroll-reveal">
+                <div class="step-num">02</div>
+                <div class="step-icon-area">
+                    <span class="step-emoji">🔍</span>
+                </div>
+                <h4>유사 패턴 매칭</h4>
+                <p><strong>Pearson·Spearman 상관분석</strong>과 DTW 알고리즘으로 5년 빅데이터에서 유사 패턴을 탐색합니다.</p>
+            </div>
+            <div class="step-connector scroll-reveal">
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none">
+                    <path d="M0 12h40m0 0l-8-8m8 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="step scroll-reveal">
                 <div class="step-num">03</div>
-                <div class="char-mini scenario-char"></div>
+                <div class="step-icon-area">
+                    <span class="step-emoji">☁️</span>
+                </div>
                 <h4>시나리오 시각화</h4>
                 <p>과거의 흐름을 바탕으로 <strong>신뢰 구간(68%/95% Cloud Band)</strong>이 포함된 시나리오를 제시합니다.</p>
             </div>
         </div>
     </section>
 
-    <!-- Technical Deep Dive -->
-    <section class="tech-deep-dive">
-        <div class="section-label">TECHNICAL DEEP DIVE</div>
-        <h2 class="section-title">주린이 차트가 데이터를 다루는 법</h2>
-
-        <div class="tech-grid">
-            <div class="tech-card">
-                <div class="tech-icon">📊</div>
+    <!-- ═══════════════ TECH BENTO GRID ═══════════════ -->
+    <section class="tech-section">
+        <div class="section-center scroll-reveal">
+            <span class="eyebrow">TECHNICAL DEEP DIVE</span>
+            <h2 class="heading-lg">주린이 차트가 데이터를 다루는 법</h2>
+        </div>
+        <div class="bento-grid">
+            <div class="bento-card bento-wide scroll-reveal">
+                <div class="bento-icon">📊</div>
                 <h4>Hybrid Correlation</h4>
                 <p>단순한 가격 흐름(Pearson)뿐만 아니라 추세의 순위(Spearman)와 거래량 상관관계까지 결합하여, 인간의 눈보다 정밀하게 패턴을 대조합니다.</p>
+                <div class="bento-visual">
+                    <div class="mini-bars">
+                        <span style="--h:65"></span>
+                        <span style="--h:80"></span>
+                        <span style="--h:45"></span>
+                        <span style="--h:90"></span>
+                        <span style="--h:55"></span>
+                        <span style="--h:75"></span>
+                    </div>
+                </div>
             </div>
-            <div class="tech-card">
-                <div class="tech-icon">📐</div>
+            <div class="bento-card scroll-reveal">
+                <div class="bento-icon">📐</div>
                 <h4>DTW Matching</h4>
-                <p><strong>Dynamic Time Warping</strong> 기술을 적용하여, 속도는 다르지만 모양이 유사한 '시간 왜곡' 패턴까지 완벽하게 잡아냅니다.</p>
+                <p><strong>Dynamic Time Warping</strong> 기술을 적용하여, 속도는 다르지만 모양이 유사한 '시간 왜곡' 패턴까지 잡아냅니다.</p>
             </div>
-            <div class="tech-card">
-                <div class="tech-icon">🌊</div>
+            <div class="bento-card scroll-reveal">
+                <div class="bento-icon">🌊</div>
                 <h4>Volatility Normalization</h4>
-                <p><strong>ATR(Average True Range)</strong> 기반의 정규화를 통해 종목마다 다른 변동성을 표준화하여, 객관적인 비교 분석을 수행합니다.</p>
+                <p><strong>ATR(Average True Range)</strong> 기반 정규화로 종목마다 다른 변동성을 표준화하여 객관적인 비교를 수행합니다.</p>
             </div>
-            <div class="tech-card">
-                <div class="tech-icon">☁️</div>
+            <div class="bento-card bento-wide scroll-reveal">
+                <div class="bento-icon">☁️</div>
                 <h4>Probabilistic Cloud</h4>
                 <p>단 하나의 선이 아닌, 통계적 확률 분포를 기반으로 한 <strong>신뢰 구름(Cloud Band)</strong>을 통해 리스크의 범위를 시각화합니다.</p>
+                <div class="bento-visual">
+                    <div class="mini-cloud">
+                        <div class="cloud-outer"></div>
+                        <div class="cloud-inner"></div>
+                        <div class="cloud-line"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Stock Q&A Section (New) -->
-    <section class="qna-intro-section">
-        <div class="qna-container-inner">
-            <div class="qna-text-content">
-                <div class="section-label">AI STOCK Q&A</div>
-                <h2 class="section-title">주식 기초, AI에게 무엇이든 물어보세요</h2>
-                <p class="section-desc">
-                    "이 주식 오를까요?" 같은 답이 없는 질문보다는,<br>
-                    <strong>골든크로스, PER, PBR</strong> 등 어려운 주식 용어와 지표를 초보자 눈높이에서 AI가 쉽고 빠르게 설명해드립니다.
+    <!-- ═══════════════ AI Q&A ═══════════════ -->
+    <section class="qna-section scroll-reveal chat-trigger">
+        <div class="qna-inner">
+            <div class="qna-text">
+                <span class="eyebrow">AI STOCK Q&A</span>
+                <h2 class="heading-lg">주식 기초, AI에게<br>무엇이든 물어보세요</h2>
+                <p class="qna-desc">
+                    "이 주식 오를까요?" 같은 답이 없는 질문보다는,
+                    <strong>골든크로스, PER, PBR</strong> 등 어려운 주식 용어와 지표를
+                    초보자 눈높이에서 AI가 쉽고 빠르게 설명해드립니다.
                 </p>
                 <div class="qna-features">
-                    <div class="qna-feature-item">
-                        <span class="icon">🔍</span>
+                    <div class="qna-feat">
+                        <span class="qna-feat-icon">🔍</span>
                         <div>
                             <h4>용어의 개념</h4>
                             <p>헷갈리는 투자 지표의 정의를 확실히 잡아드립니다.</p>
                         </div>
                     </div>
-                    <div class="qna-feature-item">
-                        <span class="icon">💡</span>
+                    <div class="qna-feat">
+                        <span class="qna-feat-icon">💡</span>
                         <div>
                             <h4>실전 활용법</h4>
                             <p>이 지표를 차트에서 어떻게 해석해야 하는지 알려드립니다.</p>
                         </div>
                     </div>
                 </div>
-                <button class="btn-secondary" routerLink="/stock-qna">주식 무물보 구경하기 (준비중)</button>
+                <a class="btn-secondary" routerLink="/stock-qna">주식 무물보 바로가기</a>
             </div>
-            <div class="qna-visual-content">
-                <div class="mock-chat-window">
-                    <div class="chat-header">
-                        <div class="jurinee-avatar"></div>
+            <div class="qna-visual">
+                <div class="chat-window">
+                    <div class="chat-win-header">
+                        <div class="chat-header-icon">AI</div>
                         <span>주식 무물보 AI</span>
+                        <span class="chat-dot"></span>
                     </div>
-                    <div class="chat-body">
-                        <ng-container *ngFor="let msg of chatHistory">
-                            <div class="msg" [class.bot]="msg.type === 'bot'" [class.user]="msg.type === 'user'">
-                                <div *ngIf="msg.type === 'bot'" class="bot-profile"></div>
-                                <div class="msg-content">{{msg.content}}</div>
+                    <div class="chat-win-body">
+                        @for (msg of chatMessages; track msg.content) {
+                            @if (msg.visible) {
+                                <div class="chat-msg" [class.is-user]="msg.type === 'user'" [class.is-bot]="msg.type === 'bot'">
+                                    @if (msg.type === 'bot') {
+                                        <div class="chat-bot-icon">AI</div>
+                                    }
+                                    <div class="chat-bubble">{{msg.content}}</div>
+                                </div>
+                            }
+                        }
+                        @if (!chatMessages[0].visible) {
+                            <div class="chat-typing">
+                                <span></span><span></span><span></span>
                             </div>
-                        </ng-container>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Feature Detail -->
-    <section class="feature-detail">
-        <div class="feature-text">
-            <div class="section-label">PROOF OF DATA</div>
-            <h3>"이런 그림, 과거에도 진짜 있었습니다"</h3>
-            <p>막연한 예측이 아닙니다. 과거의 실제 차트 기록을 하나하나 매칭하여 증거를 제시합니다. 당신의 선택에 확신을 더해줄 강력한 근거를 확인하세요.</p>
-            <ul class="feature-list">
-                <li>✅ Hybrid Correlation (Pearson + Spearman) 하이브리드 매칭</li>
-                <li>✅ DTW(Dynamic Time Warping) 기반 시간 왜곡 보정</li>
-                <li>✅ ATR 기반 변동성 정규화 및 가중치 분석</li>
-                <li>✅ 68%/95% 확률 분포 기반의 신뢰 구간(Cloud Band) 제공</li>
-            </ul>
-            <button class="btn-secondary" routerLink="/chart">분석 도구 둘러보기</button>
-        </div>
-        <div class="feature-visual">
-            <div class="visual-placeholder">
-                <!-- CSS로 화이트/블루 테마의 전문적인 그래픽 구현 -->
-                <div class="match-case-card">
-                    <div class="case-header">2023.05.12 삼성전자와 96% 일치</div>
-                    <div class="case-body"></div>
+    <!-- ═══════════════ PROOF OF DATA ═══════════════ -->
+    <section class="proof-section scroll-reveal">
+        <div class="proof-inner">
+            <div class="proof-text">
+                <span class="eyebrow">PROOF OF DATA</span>
+                <h3 class="heading-md">"이런 그림, 과거에도<br>진짜 있었습니다"</h3>
+                <p>막연한 예측이 아닙니다. 과거의 실제 차트 기록을 하나하나 매칭하여 증거를 제시합니다.</p>
+                <ul class="proof-list">
+                    <li>Hybrid Correlation (Pearson + Spearman) 하이브리드 매칭</li>
+                    <li>DTW(Dynamic Time Warping) 기반 시간 왜곡 보정</li>
+                    <li>ATR 기반 변동성 정규화 및 가중치 분석</li>
+                    <li>68%/95% 확률 분포 기반 신뢰 구간(Cloud Band)</li>
+                </ul>
+                <a class="btn-secondary" routerLink="/chart">분석 도구 둘러보기</a>
+            </div>
+            <div class="proof-visual">
+                <div class="proof-card">
+                    <div class="proof-card-header">
+                        <span class="proof-tag">96% 일치</span>
+                        <span class="proof-date">2023.05.12 삼성전자</span>
+                    </div>
+                    <div class="proof-card-body">
+                        <div class="proof-mini-chart">
+                            <div class="proof-line proof-line--current"></div>
+                            <div class="proof-line proof-line--match"></div>
+                            <div class="proof-cloud-area"></div>
+                        </div>
+                        <div class="proof-legend">
+                            <span class="legend-item"><span class="dot dot--blue"></span> 현재 패턴</span>
+                            <span class="legend-item"><span class="dot dot--green"></span> 과거 매칭</span>
+                            <span class="legend-item"><span class="dot dot--cloud"></span> 신뢰 구간</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Final CTA & Disclaimer -->
+    <!-- ═══════════════ FINAL CTA (dark) ═══════════════ -->
     <section class="final-cta">
-        <div class="cta-inner">
-            <h2>지금 바로 당신의 종목을 분석해보세요</h2>
+        <div class="final-glow"></div>
+        <div class="final-inner">
+            <h2>지금 바로 당신의 종목을<br>분석해보세요</h2>
             <p>회원가입 없이 즉시 무료 분석이 가능합니다.</p>
-            <button class="btn-cta-premium big" routerLink="/chart">무료로 분석 시작하기</button>
-
-            <div class="legal-disclaimer">
-                <p>※ 주의: 주린이 차트는 과거 데이터 패턴 매칭 정보를 제공하는 기술적 분석 도구입니다.</p>
+            <a class="btn-glow btn-glow--lg" routerLink="/chart">무료로 분석 시작하기</a>
+            <div class="legal">
+                <p>※ 주린이 차트는 과거 데이터 패턴 매칭 정보를 제공하는 기술적 분석 도구입니다.</p>
                 <p>제공되는 정보는 투자 수익을 보장하지 않으며, 모든 투자의 결정과 책임은 투자자 본인에게 있습니다.</p>
             </div>
         </div>

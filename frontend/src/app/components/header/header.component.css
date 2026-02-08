@@ -1,101 +1,114 @@
 .app-header {
-  padding: 12px 24px;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
   background-color: var(--content-bg);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-light);
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: var(--shadow-sm);
 }
 
 .header-content {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
+/* ── Logo ── */
 .logo-area {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 0;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .logo-icon {
-  font-size: 24px;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
 }
 
 .logo-text {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text-primary);
   letter-spacing: -0.5px;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
+/* ── Navigation ── */
 .header-nav {
   display: flex;
-  gap: 24px;
-  margin-left: 40px;
+  gap: 6px;
+  margin-left: 36px;
   flex: 1;
 }
 
 .nav-item {
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  color: var(--text-secondary);
-  transition: all 0.2s;
-  padding: 4px 0;
-  border-bottom: 2px solid transparent;
+  color: var(--text-tertiary);
+  transition: all var(--transition-fast);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
 }
 
 .nav-item:hover {
-  color: var(--primary-color);
+  color: var(--text-primary);
+  background: var(--border-light);
 }
 
 .nav-item.active {
   color: var(--primary-color);
-  border-bottom-color: var(--primary-color);
+  background: var(--primary-light);
 }
 
-/* Button Styles */
+/* ── Actions ── */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Buttons ── */
 button {
   padding: 8px 16px;
   border-radius: var(--radius-sm);
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   font-family: inherit;
 }
 
 .btn-text {
   background: transparent;
   color: var(--text-secondary);
+  padding: 8px 14px;
 }
 
 .btn-text:hover {
-  background-color: var(--bg-color);
+  background-color: var(--border-light);
   color: var(--text-primary);
 }
 
 .btn-primary {
   background-color: var(--primary-color);
   color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 8px 20px;
+  font-size: 13px;
 }
 
 .btn-primary:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.08);
   box-shadow: 0 4px 12px rgba(49, 130, 246, 0.2);
 }
 
@@ -107,14 +120,16 @@ button {
   align-items: center;
   justify-content: center;
   background: transparent;
-  font-size: 18px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
 }
 
 .btn-icon:hover {
-  background-color: var(--bg-color);
+  background-color: var(--border-light);
+  color: var(--text-primary);
 }
 
 .btn-logout:hover {
-  background-color: #fff0f0;
+  background-color: var(--positive-bg);
+  color: var(--positive-color);
 }

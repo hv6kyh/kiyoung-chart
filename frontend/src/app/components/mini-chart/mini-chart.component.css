@@ -5,8 +5,7 @@
 .mini-chart-container {
     width: 100%;
     height: 100%;
-    border-radius: 12px;
+    border-radius: var(--radius-md, 8px);
     overflow: hidden;
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
+    background: transparent;
 }

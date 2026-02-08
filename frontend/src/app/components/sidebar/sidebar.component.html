@@ -1,76 +1,128 @@
 <div class="sidebar-wrapper">
     <div class="sidebar-container">
+        <!-- Data Summary Card -->
         <div class="card data-summary-card">
-            <h3 class="card-title">데이터 통합 분석</h3>
-            <div class="metric-container">
-                <div class="metric-item">
+            <h3 class="card-title">
+                <lucide-angular name="activity" [size]="16"></lucide-angular>
+                통합 분석
+            </h3>
+
+            <!-- RSI Gauge -->
+            <div class="metric-block">
+                <div class="metric-header">
                     <span class="m-label">RSI 상태</span>
-                    <span class="m-value" [class.warning]="rsiAnalysis()?.status !== '중립'">
-                        {{ rsiStatusDisplay() }}
-                    </span>
+                    <span class="m-badge" [class]="rsiStatusClass()">{{ rsiStatusDisplay() }}</span>
                 </div>
-                <div class="metric-item">
+                <div class="rsi-gauge">
+                    <div class="gauge-track">
+                        <div class="gauge-fill" [style.width.%]="rsiValue()"></div>
+                        <div class="gauge-marker" [style.left.%]="rsiValue()"></div>
+                    </div>
+                    <div class="gauge-labels">
+                        <span>과매도</span>
+                        <span>중립</span>
+                        <span>과매수</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Momentum Signal -->
+            <div class="metric-block">
+                <div class="metric-header">
                     <span class="m-label">모멘텀 신호</span>
-                    <span class="m-value" [class.high]="rsiAnalysis()?.divergence_type !== 'None'">
-                        {{ momentumSignal() }}
-                    </span>
                 </div>
-                <div class="metric-item">
+                <div class="signal-chip" [class]="momentumChipClass()">
+                    <span class="signal-dot"></span>
+                    {{ momentumSignal() }}
+                </div>
+            </div>
+
+            <!-- Confidence Ring -->
+            <div class="metric-block confidence-block">
+                <div class="metric-header">
                     <span class="m-label">패턴 신뢰도</span>
-                    <span class="m-value" [class.high]="confidenceScore() > 60">
-                        {{ confidenceScore() }}% {{ confidenceLevel() }}
-                    </span>
                 </div>
-                <div class="metric-item vertical">
-                    <span class="m-label">RSI 코멘트</span>
-                    <span class="m-value comment-text">
-                        "{{ rsiAnalysis()?.comment || '연산 중...' }}"
-                    </span>
+                <div class="confidence-display">
+                    <div class="confidence-ring-wrap">
+                        <svg class="confidence-ring" viewBox="0 0 80 80">
+                            <circle class="ring-bg" cx="40" cy="40" r="34" />
+                            <circle class="ring-fill" cx="40" cy="40" r="34"
+                                [style.stroke-dashoffset]="confidenceOffset()" />
+                        </svg>
+                        <div class="confidence-text">
+                            <span class="confidence-number">{{ confidenceScore() }}</span>
+                            <span class="confidence-unit">%</span>
+                        </div>
+                    </div>
+                    <span class="confidence-label">{{ confidenceLevel() }}</span>
                 </div>
+            </div>
+
+            <!-- RSI Comment -->
+            <div class="comment-block">
+                <lucide-angular name="message-circle" [size]="14"></lucide-angular>
+                <p class="comment-text">{{ rsiAnalysis()?.comment || '분석 데이터를 불러오는 중...' }}</p>
             </div>
         </div>
 
+        <!-- Pattern Matches Card -->
         <div class="card matches-card">
             <div class="card-header-row">
-                <h3 class="card-title">근거 매칭 (Pattern Proof)</h3>
-                <span class="info-icon" title="과거 수만 개의 데이터 중 현재와 가장 유사한 구간들입니다.">ⓘ</span>
+                <h3 class="card-title">근거 매칭</h3>
+                <lucide-angular name="help-circle" [size]="14" class="info-icon"
+                    title="과거 수만 개의 데이터 중 현재와 가장 유사한 구간들입니다."></lucide-angular>
             </div>
             <div class="matches-list">
                 @for (match of data()?.matches; track match.date; let i = $index) {
-                <div class="match-item" (click)="openProof(match)" (mouseenter)="onMatchHover($event, match)"
-                    (mouseleave)="onMatchHover($event, null)">
-                    <div class="match-info">
-                        <span class="match-date">{{ match.date }} <small>의 흐름</small></span>
-                        <span class="match-badge" [class.high]="match.correlation > 0.8">
-                            {{ ((match.correlation * 100) | number:'1.1-1') + '%' }} 일치
-                        </span>
+                    <div class="match-item" (click)="openProof(match)" (mouseenter)="onMatchHover($event, match)"
+                        (mouseleave)="onMatchHover($event, null)">
+                        <div class="match-info">
+                            <span class="match-date">{{ match.date }}</span>
+                            <span class="match-badge" [class.high]="match.correlation > 0.8">
+                                {{ ((match.correlation * 100) | number:'1.1-1') }}%
+                            </span>
+                        </div>
+                        <div class="match-bar-wrap">
+                            <div class="match-bar">
+                                <div class="match-bar-fill" [style.width.%]="match.correlation * 100"
+                                    [class.high]="match.correlation > 0.8"></div>
+                            </div>
+                        </div>
+                        <div class="match-action">
+                            <span>증명 보기</span>
+                            <lucide-angular name="arrow-right" [size]="12"></lucide-angular>
+                        </div>
                     </div>
-                    <div class="match-action">증명 보기 ></div>
-                </div>
                 } @empty {
-                <div class="empty-msg">
-                    <ng-container *ngIf="data(); else loading">
-                        유사한 패턴을 찾지 못했습니다.
-                    </ng-container>
-                    <ng-template #loading>
-                        <div class="loader-dots"><span></span><span></span><span></span></div>
-                        데이터 분석 중...
-                    </ng-template>
-                </div>
+                    <div class="empty-msg">
+                        @if (data()) {
+                            <div class="empty-icon">📊</div>
+                            <p>유사한 패턴을 찾지 못했습니다.</p>
+                            <p class="empty-sub">다른 종목이나 분석 모드를 시도해 보세요.</p>
+                        } @else {
+                            <div class="loader-dots"><span></span><span></span><span></span></div>
+                            <p>데이터 분석 중...</p>
+                        }
+                    </div>
                 }
             </div>
         </div>
     </div>
 
-    <!-- Hover Tooltip (Outside scrollable container) -->
+    <!-- Hover Tooltip -->
     @if (hoveredMatch(); as match) {
-    <div class="match-tooltip" [style.top.px]="tooltipY()">
-        <div class="tooltip-header">
-            <span class="tooltip-date">{{ match.date }}</span>
-            <span class="tooltip-correlation">{{ ((match.correlation * 100) | number:'1.1-1') }}% 일치</span>
+        <div class="match-tooltip" [style.top.px]="tooltipY()">
+            <div class="tooltip-arrow"></div>
+            <div class="tooltip-header">
+                <span class="tooltip-date">{{ match.date }}</span>
+                <span class="tooltip-correlation">{{ ((match.correlation * 100) | number:'1.1-1') }}%</span>
+            </div>
+            <div class="tooltip-chart-wrap">
+                <app-mini-chart [data]="match.windowData" [width]="280" [height]="160" [minimal]="true"></app-mini-chart>
+            </div>
+            <div class="tooltip-footer">
+                <span class="tooltip-hint">클릭하면 상세 보기</span>
+            </div>
         </div>
-        <app-mini-chart [data]="match.windowData" [width]="280" [height]="160">
-        </app-mini-chart>
-    </div>
     }
 </div>

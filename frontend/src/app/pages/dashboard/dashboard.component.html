@@ -4,63 +4,81 @@
         <app-stock-sidebar (stockSelected)="selectSymbol($event)"></app-stock-sidebar>
 
         <main class="chart-section">
+            <!-- Analysis Mode Tabs -->
             <div class="analysis-modes">
-                <button class="mode-tab" [class.active]="analysisMode() === 'BASIC'"
-                    (click)="setAnalysisMode('BASIC')">기본 분석</button>
-                <button class="mode-tab" [class.active]="analysisMode() === 'MULTI'"
-                    (click)="setAnalysisMode('MULTI')">다중 시간 프레임</button>
-                <button class="mode-tab" [class.active]="analysisMode() === 'ADVANCED'"
-                    (click)="setAnalysisMode('ADVANCED')">정밀 분석 (DTW/ATR)</button>
+                @for (mode of analysisModes; track mode.key) {
+                    <button class="mode-tab" [class.active]="analysisMode() === mode.key"
+                        (click)="setAnalysisMode(mode.key)">
+                        <span class="mode-label">{{ mode.label }}</span>
+                        <span class="mode-desc">{{ mode.desc }}</span>
+                    </button>
+                }
             </div>
 
-            <div class="chart-header" *ngIf="!isLoading() && predictionData(); else headerSkeleton">
-                <div class="stock-title">
-                    <h2>{{ currentSymbol() }}</h2>
-                    <div class="stock-price-info">
-                        <span class="price">{{ currentPrice() | number }}</span>
-                        <span class="change" [class.up]="priceChange().isUp" [class.down]="!priceChange().isUp">
-                            {{ priceChange().isUp ? '+' : '-' }}{{ priceChange().percent | number:'1.2-2' }}%
-                        </span>
+            <!-- Stock Header -->
+            @if (!isLoading() && predictionData()) {
+                <div class="chart-header">
+                    <div class="stock-title">
+                        <div class="name-row">
+                            <h2>{{ currentStockInfo().name }}</h2>
+                            <span class="stock-code-badge">{{ currentSymbol() }}</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="current-price" [class.up]="priceChange().isUp" [class.down]="!priceChange().isUp">
+                                {{ currentPrice() | number }}
+                            </span>
+                            <span class="price-change" [class.up]="priceChange().isUp" [class.down]="!priceChange().isUp">
+                                {{ priceChange().isUp ? '▲' : '▼' }}
+                                {{ priceChange().value | number }}
+                                ({{ priceChange().isUp ? '+' : '-' }}{{ priceChange().percent | number:'1.2-2' }}%)
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="sector-tags">
-                    <span class="tag">반도체</span>
-                    <span class="tag">KOSPI 200</span>
+            } @else {
+                <div class="skeleton-header skeleton-shimmer"></div>
+            }
+
+            <!-- Chart Wrapper -->
+            @if (!isLoading()) {
+                <div class="chart-wrapper">
+                    @if (analysisMode() !== 'BASIC') {
+                        <div class="analysis-info-overlay">
+                            @if (analysisMode() === 'MULTI' && multiTimeframeData()) {
+                                <div class="info-pill">
+                                    <span class="info-label">종합 신뢰도</span>
+                                    <span class="info-grade" [class]="'grade-' + multiTimeframeData()?.confidence">
+                                        {{ multiTimeframeData()?.confidence }}등급
+                                    </span>
+                                </div>
+                            }
+                            @if (analysisMode() === 'ADVANCED') {
+                                <div class="info-pill">
+                                    <span class="tag-sm">DTW 보정</span>
+                                    <span class="tag-sm">ATR 정규화</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    <app-chart [data]="predictionData()"></app-chart>
                 </div>
+            } @else {
+                <div class="chart-wrapper skeleton-shimmer" style="min-height: 400px;">
+                </div>
+            }
+
+            <!-- Disclaimer -->
+            <div class="disclaimer-bar">
+                <lucide-angular name="info" [size]="14"></lucide-angular>
+                <span>본 분석은 과거 패턴 기반의 참고 자료이며, 실제 투자 결과를 보장하지 않습니다.</span>
             </div>
-
-            <ng-template #headerSkeleton>
-                <div class="skeleton-header pulse"></div>
-            </ng-template>
-
-            <div class="chart-wrapper" *ngIf="!isLoading(); else chartSkeleton">
-                <div class="analysis-info-overlay" *ngIf="analysisMode() !== 'BASIC'">
-                    <div class="info-item" *ngIf="analysisMode() === 'MULTI' && multiTimeframeData()">
-                        <span class="label">종합 신뢰도</span>
-                        <span class="value grade" [class]="'grade-' + multiTimeframeData()?.confidence">
-                            {{ multiTimeframeData()?.confidence }}등급
-                        </span>
-                    </div>
-                    <div class="info-item" *ngIf="analysisMode() === 'ADVANCED'">
-                        <span class="tag small">DTW 보정</span>
-                        <span class="tag small">ATR 정규화</span>
-                    </div>
-                </div>
-                <app-chart [data]="predictionData()"></app-chart>
-            </div>
-
-            <ng-template #chartSkeleton>
-                <div class="chart-wrapper skeleton pulse">
-                    <div class="skeleton-chart-line"></div>
-                </div>
-            </ng-template>
         </main>
 
         <app-sidebar [data]="predictionData()"></app-sidebar>
     </div>
-    <app-footer></app-footer>
+
     @if (authService.showAuthModal()) {
-    <app-auth-modal></app-auth-modal>
+        <app-auth-modal></app-auth-modal>
     }
     <app-match-detail-modal></app-match-detail-modal>
 </div>

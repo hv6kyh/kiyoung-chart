@@ -1,52 +1,62 @@
-<div class="modal-overlay" *ngIf="uiService.showMatchModal()" (click)="uiService.closeMatchDetail()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-        <button class="close-btn" (click)="uiService.closeMatchDetail()">✕</button>
+@if (uiService.showMatchModal()) {
+    <div class="modal-overlay" (click)="uiService.closeMatchDetail()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <button class="close-btn" (click)="uiService.closeMatchDetail()">
+                <lucide-angular name="x" [size]="20"></lucide-angular>
+            </button>
 
-        <header class="modal-header">
-            <div class="modal-title-row">
-                <span class="date">{{ uiService.selectedMatch()?.date }}</span>
-                <span class="badge">검증된 과거 패턴</span>
-            </div>
-            <h3 class="proof-headline">"과거에도 지금과 똑같은 흐름이 있었습니다"</h3>
-            <p class="proof-sub">
-                아래 차트는 {{ uiService.selectedMatch()?.date }}의 실제 차트입니다.
-                이 패턴이 현재와 <strong>{{ ((uiService.selectedMatch()?.correlation || 0) * 100) | number:'1.1-1' }}%
-                    일치</strong>합니다.
-            </p>
-        </header>
+            <header class="modal-header">
+                <div class="modal-title-row">
+                    <span class="date">{{ uiService.selectedMatch()?.date }}</span>
+                    <span class="badge">검증된 과거 패턴</span>
+                </div>
+                <h3 class="proof-headline">"과거에도 지금과 똑같은 흐름이 있었습니다"</h3>
+                <p class="proof-sub">
+                    아래 차트는 {{ uiService.selectedMatch()?.date }}의 실제 차트입니다.
+                    이 패턴이 현재와 <strong>{{ ((uiService.selectedMatch()?.correlation || 0) * 100) | number:'1.1-1' }}%
+                        일치</strong>합니다.
+                </p>
+            </header>
 
-        <div class="chart-container-large">
-            <div class="chart-label">
-                <span class="label-icon">📅</span>
-                <span class="label-text">{{ uiService.selectedMatch()?.date }} 시점의 실제 차트</span>
+            <div class="chart-container-large">
+                <div class="chart-label">
+                    <lucide-angular name="calendar" [size]="16"></lucide-angular>
+                    <span class="label-text">{{ uiService.selectedMatch()?.date }} 시점의 실제 차트</span>
+                </div>
+                <app-mini-chart [data]="uiService.selectedMatch()?.windowData || []" [autoWidth]="true" [height]="380">
+                </app-mini-chart>
             </div>
-            <app-mini-chart [data]="uiService.selectedMatch()?.windowData || []" [width]="700" [height]="400">
-            </app-mini-chart>
+
+            <div class="insight-box">
+                <h4>
+                    <lucide-angular name="lightbulb" [size]="16"></lucide-angular>
+                    왜 이 패턴이 중요한가요?
+                </h4>
+                <p>
+                    위 차트는 과거 {{ uiService.selectedMatch()?.date }} 시점의 <strong>실제 주가 흐름</strong>입니다.
+                    이 패턴이 지금 보고 계신 차트와 매우 유사하기 때문에, 당시 이후 20일간의 주가 움직임을
+                    참고하여 현재의 미래 예측을 생성했습니다.
+                </p>
+                <p class="insight-disclaimer">
+                    ※ 과거 패턴은 참고용이며, 실제 투자 결과를 보장하지 않습니다.
+                </p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="m-card">
+                    <span class="m-label">패턴 일치도</span>
+                    <span class="m-value">{{ ((uiService.selectedMatch()?.correlation || 0) * 100) | number:'1.1-1'
+                        }}%</span>
+                </div>
+                <div class="m-card">
+                    <span class="m-label">참고 기간</span>
+                    <span class="m-value">20일</span>
+                </div>
+            </div>
+
+            <footer class="modal-footer">
+                <button class="btn-confirm" (click)="uiService.closeMatchDetail()">확인</button>
+            </footer>
         </div>
-
-        <div class="insight-box">
-            <h4>💡 왜 이 패턴이 중요한가요?</h4>
-            <p>
-                위 차트는 과거 {{ uiService.selectedMatch()?.date }} 시점의 <strong>실제 주가 흐름</strong>입니다.
-                이 패턴이 지금 보고 계신 차트와 매우 유사하기 때문에, 당시 이후 20일간의 주가 움직임을
-                참고하여 현재의 미래 예측을 생성했습니다.
-            </p>
-        </div>
-
-        <div class="metrics-grid">
-            <div class="m-card">
-                <span class="m-label">패턴 일치도</span>
-                <span class="m-value">{{ ((uiService.selectedMatch()?.correlation || 0) * 100) | number:'1.1-1'
-                    }}%</span>
-            </div>
-            <div class="m-card">
-                <span class="m-label">참고 기간</span>
-                <span class="m-value">20일</span>
-            </div>
-        </div>
-
-        <footer class="modal-footer">
-            <button class="btn-confirm" (click)="uiService.closeMatchDetail()">확인</button>
-        </footer>
     </div>
-</div>
+}

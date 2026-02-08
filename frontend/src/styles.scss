@@ -2,25 +2,60 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
 
 :root {
-    /* Colors */
-    --bg-color: #f6f7f9;
+    /* ═══ Color Tokens ═══ */
+    --bg-color: #f4f5f7;
+    --bg-elevated: #ffffff;
     --content-bg: #ffffff;
     --primary-color: #3182f6;
-    --text-primary: #333d4b;
+    --primary-light: #e8f3ff;
+    --primary-lighter: #f2f7ff;
+    --text-primary: #191f28;
     --text-secondary: #4e5968;
     --text-tertiary: #8b95a1;
+    --text-disabled: #b0b8c1;
     --positive-color: #f04452;
+    --positive-bg: #fff0f0;
     --negative-color: #3182f6;
+    --negative-bg: #e8f3ff;
+    --warning-color: #ff9f43;
+    --warning-bg: #fff8ef;
+    --success-color: #2ecc71;
+    --success-bg: #edfcf2;
     --border-color: #e5e8eb;
+    --border-light: #f2f4f6;
+    --divider-color: #f2f4f6;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.04);
+    /* ═══ Shadows (layered depth) ═══ */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
 
-    /* Radii */
+    /* ═══ Radii ═══ */
+    --radius-xs: 4px;
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+
+    /* ═══ Spacing (8px grid) ═══ */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 20px;
+    --space-2xl: 24px;
+    --space-3xl: 32px;
+
+    /* ═══ Transitions ═══ */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ═══ Layout ═══ */
+    --header-height: 56px;
 }
 
 body {
@@ -31,4 +66,28 @@ body {
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* ═══ Global Utilities ═══ */
+
+@keyframes skeleton-pulse {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+    background: linear-gradient(90deg, #f2f4f6 25%, #e5e8eb 50%, #f2f4f6 75%);
+    background-size: 200% 100%;
+    animation: skeleton-pulse 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
