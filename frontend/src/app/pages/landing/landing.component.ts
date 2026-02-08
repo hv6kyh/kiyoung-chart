@@ -1,8 +1,9 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
     selector: 'app-landing',
@@ -13,6 +14,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 })
 export class LandingComponent implements AfterViewInit, OnDestroy {
     version = 'v0.2';
+    private analytics = inject(AnalyticsService);
 
     /* ── animated counters ── */
     matchRate = 0;
@@ -67,6 +69,8 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
                 for (const entry of entries) {
                     if (!entry.isIntersecting) continue;
                     entry.target.classList.add('in-view');
+                    const section = entry.target.getAttribute('data-section') || entry.target.className;
+                    this.analytics.capture('landing_section_viewed', { section });
 
                     if (entry.target.classList.contains('stats-trigger') && !this.statsAnimated) {
                         this.statsAnimated = true;

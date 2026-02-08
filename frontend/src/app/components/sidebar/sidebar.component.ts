@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { PredictionResult, PredictionMatch } from '../../types/stock.types';
 import { MiniChartComponent } from '../mini-chart/mini-chart.component';
 import { UIStateService } from '../../services/ui-state.service';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -91,10 +92,18 @@ export class SidebarComponent {
     return this.rsiAnalysis()?.rsi_value || 50;
   });
 
-  constructor(public uiService: UIStateService) {}
+  constructor(
+    public uiService: UIStateService,
+    private analytics: AnalyticsService,
+  ) {}
 
   openProof(match: PredictionMatch) {
     this.uiService.openMatchDetail(match);
+    this.analytics.capture('match_proof_opened', {
+      correlation: match.correlation,
+      date: match.date,
+      rank: match.rank,
+    });
   }
 
   onMatchHover(event: MouseEvent, match: PredictionMatch | null) {

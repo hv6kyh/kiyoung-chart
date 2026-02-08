@@ -66,10 +66,35 @@ Angular 21 with standalone components, lightweight-charts for candlestick visual
 - `StockService` — HTTP calls to backend API
 - `AuthService` — Mock authentication
 - `UIStateService` — Shared UI state via RxJS
+- `AnalyticsService` — PostHog SDK 래퍼 (아래 Analytics 섹션 참조)
 
-**Environment config:** API base URL set in `src/environments/environment.ts` (dev: `localhost:3000/api`) and `environment.prod.ts` (AWS App Runner).
+**Environment config:** API base URL과 PostHog 키가 `src/environments/environment.ts` (dev) 및 `environment.prod.ts` (prod)에 설정되어 있다. dev에서는 PostHog `apiKey`가 빈 문자열이면 초기화를 건너뛴다.
 
 **Prettier config** is embedded in `package.json`: printWidth 100, singleQuote, Angular HTML parser.
+
+### Analytics (PostHog)
+
+`posthog-js`를 통해 사용자 행동을 추적한다. `AnalyticsService` (`src/app/services/analytics.service.ts`)가 유일한 진입점이며, 앱 루트(`app.ts`)에서 초기화된다.
+
+**자동 수집 (Autocapture):** 모든 클릭, 페이지뷰, 체류 시간, 세션, 유니크 유저, 기기/브라우저 정보가 코드 없이 자동 수집된다.
+
+**커스텀 이벤트:**
+
+| 이벤트명 | 위치 | 프로퍼티 |
+|----------|------|----------|
+| `stock_selected` | DashboardComponent | `{ symbol }` |
+| `analysis_mode_changed` | DashboardComponent | `{ mode, symbol }` |
+| `analysis_loaded` | DashboardComponent | `{ symbol, mode, matchCount }` |
+| `analysis_error` | DashboardComponent | `{ symbol, mode, error }` |
+| `sidebar_stock_clicked` | StockSidebarComponent | `{ code }` |
+| `add_stock_clicked` | StockSidebarComponent | `{ isLoggedIn }` |
+| `match_proof_opened` | SidebarComponent | `{ correlation, date, rank }` |
+| `landing_section_viewed` | LandingComponent | `{ section }` |
+| `auth_modal_opened` | AuthService | `{ mode }` |
+| `user_logged_in` | AuthService | — |
+| `user_logged_out` | AuthService | — |
+
+**새 이벤트 추가 시:** 컴포넌트에 `AnalyticsService`를 주입하고 `this.analytics.capture('event_name', { ... })`를 호출한다. 이벤트명은 `snake_case`, 프로퍼티 키도 `snake_case`로 통일한다.
 
 ### Docker
 

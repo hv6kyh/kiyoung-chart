@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
 import { StockService } from '../../services/stock.service';
+import { AnalyticsService } from '../../services/analytics.service';
 
 export interface StockSymbol {
   code: string;
@@ -33,6 +34,7 @@ export class StockSidebarComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private stockService: StockService,
+    private analytics: AnalyticsService,
   ) {}
 
   stocks = signal<StockSymbol[]>([
@@ -116,9 +118,11 @@ export class StockSidebarComponent implements OnInit {
   selectStock(code: string) {
     this.selectedStock.set(code);
     this.stockSelected.emit(code);
+    this.analytics.capture('sidebar_stock_clicked', { code });
   }
 
   onAddStock() {
+    this.analytics.capture('add_stock_clicked', { isLoggedIn: this.authService.isLoggedIn() });
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/stocks/add']);
     } else {

@@ -9,6 +9,7 @@ import { AuthModalComponent } from '../../components/auth-modal/auth-modal.compo
 import { MatchDetailModalComponent } from '../../components/match-detail-modal/match-detail-modal.component';
 import { StockService } from '../../services/stock.service';
 import { AuthService } from '../../services/auth.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { PredictionResult, MultiTimeframeResult } from '../../types/stock.types';
 
 @Component({
@@ -74,6 +75,7 @@ export class DashboardComponent implements OnInit {
     constructor(
         private stockService: StockService,
         public authService: AuthService,
+        private analytics: AnalyticsService,
     ) {}
 
     ngOnInit() {
@@ -82,11 +84,13 @@ export class DashboardComponent implements OnInit {
 
     async selectSymbol(symbol: string) {
         this.currentSymbol.set(symbol);
+        this.analytics.capture('stock_selected', { symbol });
         this.loadData();
     }
 
     setAnalysisMode(mode: 'BASIC' | 'MULTI' | 'ADVANCED') {
         this.analysisMode.set(mode);
+        this.analytics.capture('analysis_mode_changed', { mode, symbol: this.currentSymbol() });
         this.loadData();
     }
 
@@ -101,10 +105,12 @@ export class DashboardComponent implements OnInit {
                     this.predictionData.set(result);
                     this.multiTimeframeData.set(null);
                     this.isLoading.set(false);
+                    this.analytics.capture('analysis_loaded', { symbol, mode, matchCount: result.matches.length });
                 },
                 error: (error) => {
                     console.error('Error loading data:', error);
                     this.isLoading.set(false);
+                    this.analytics.capture('analysis_error', { symbol, mode, error: String(error.message ?? error) });
                 },
             });
         } else if (mode === 'MULTI') {
@@ -113,10 +119,12 @@ export class DashboardComponent implements OnInit {
                     this.multiTimeframeData.set(result);
                     this.predictionData.set(result.combined);
                     this.isLoading.set(false);
+                    this.analytics.capture('analysis_loaded', { symbol, mode, matchCount: result.combined.matches.length });
                 },
                 error: (error) => {
                     console.error('Error loading multi-timeframe data:', error);
                     this.isLoading.set(false);
+                    this.analytics.capture('analysis_error', { symbol, mode, error: String(error.message ?? error) });
                 },
             });
         } else if (mode === 'ADVANCED') {
@@ -125,10 +133,12 @@ export class DashboardComponent implements OnInit {
                     this.predictionData.set(result);
                     this.multiTimeframeData.set(null);
                     this.isLoading.set(false);
+                    this.analytics.capture('analysis_loaded', { symbol, mode, matchCount: result.matches.length });
                 },
                 error: (error) => {
                     console.error('Error loading advanced data:', error);
                     this.isLoading.set(false);
+                    this.analytics.capture('analysis_error', { symbol, mode, error: String(error.message ?? error) });
                 },
             });
         }
