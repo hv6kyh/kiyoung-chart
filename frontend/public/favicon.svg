@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3182f6"/>
+      <stop offset="100%" stop-color="#1b64da"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Candlestick 1 (red, bearish - tallest, left) -->
+  <line x1="15" y1="12" x2="15" y2="52" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="10" y="18" width="10" height="22" rx="2.5" fill="#ff6b6b"/>
+  <!-- Candlestick 2 (green, bullish - middle) -->
+  <line x1="32" y1="18" x2="32" y2="50" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="27" y="24" width="10" height="18" rx="2.5" fill="#51cf66"/>
+  <!-- Candlestick 3 (green, bullish - shortest, right, highest position) -->
+  <line x1="49" y1="10" x2="49" y2="42" stroke="rgba(255,255,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="44" y="14" width="10" height="20" rx="2.5" fill="#51cf66"/>
+</svg>
