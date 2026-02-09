@@ -9,39 +9,60 @@
                 (click)="setMode('signup')">회원가입</button>
         </div>
 
+        @if (authService.authError()) {
+            <div class="auth-error">
+                {{ authService.authError() }}
+            </div>
+        }
+
         @if (authService.authMode() === 'login') {
-        <div class="login-form">
+        <form class="login-form" (submit)="$event.preventDefault(); onSubmit()">
             <div class="form-group">
                 <label>이메일</label>
-                <input type="email" placeholder="email@example.com">
+                <input type="email" placeholder="email@example.com"
+                    [value]="email()"
+                    (input)="onEmailInput($event)"
+                    [disabled]="authService.authLoading()">
             </div>
             <div class="form-group">
                 <label>비밀번호</label>
-                <input type="password" placeholder="••••••••">
+                <input type="password" placeholder="••••••••"
+                    [value]="password()"
+                    (input)="onPasswordInput($event)"
+                    [disabled]="authService.authLoading()">
             </div>
-            <button class="submit-btn" (click)="authService.login()">로그인</button>
-        </div>
-        } @else {
-        <div class="signup-form">
-            <div class="form-group">
-                <label>이메일</label>
-                <input type="email" placeholder="email@example.com">
-            </div>
-            <div class="form-group">
-                <label>비밀번호</label>
-                <input type="password" placeholder="••••••••">
-            </div>
-            <button class="submit-btn" (click)="authService.login()">가입하기</button>
-
-            <div class="divider">
-                <span>OR</span>
-            </div>
-
-            <button class="kakao-login-btn">
-                <span class="kakao-icon">💬</span>
-                카카오로 시작하기
+            <button class="submit-btn" type="submit" [disabled]="authService.authLoading()">
+                @if (authService.authLoading()) {
+                    <span class="spinner"></span> 처리 중...
+                } @else {
+                    로그인
+                }
             </button>
-        </div>
+        </form>
+        } @else {
+        <form class="signup-form" (submit)="$event.preventDefault(); onSubmit()">
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" placeholder="email@example.com"
+                    [value]="email()"
+                    (input)="onEmailInput($event)"
+                    [disabled]="authService.authLoading()">
+            </div>
+            <div class="form-group">
+                <label>비밀번호</label>
+                <input type="password" placeholder="••••••••"
+                    [value]="password()"
+                    (input)="onPasswordInput($event)"
+                    [disabled]="authService.authLoading()">
+            </div>
+            <button class="submit-btn" type="submit" [disabled]="authService.authLoading()">
+                @if (authService.authLoading()) {
+                    <span class="spinner"></span> 처리 중...
+                } @else {
+                    가입하기
+                }
+            </button>
+        </form>
         }
     </div>
 </div>

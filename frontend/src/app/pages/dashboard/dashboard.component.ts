@@ -5,7 +5,6 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { StockSidebarComponent } from '../../components/stock-sidebar/stock-sidebar.component';
 import { ChartComponent } from '../../components/chart/chart.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { AuthModalComponent } from '../../components/auth-modal/auth-modal.component';
 import { MatchDetailModalComponent } from '../../components/match-detail-modal/match-detail-modal.component';
 import { StockService } from '../../services/stock.service';
 import { AuthService } from '../../services/auth.service';
@@ -22,24 +21,23 @@ import { PredictionResult, MultiTimeframeResult } from '../../types/stock.types'
         StockSidebarComponent,
         ChartComponent,
         SidebarComponent,
-        AuthModalComponent,
         MatchDetailModalComponent,
     ],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-    currentSymbol = signal('005930.KS');
+    currentSymbol = signal('000660.KS');
     predictionData = signal<PredictionResult | null>(null);
     multiTimeframeData = signal<MultiTimeframeResult | null>(null);
     analysisMode = signal<'BASIC' | 'MULTI' | 'ADVANCED'>('BASIC');
     isLoading = signal(false);
 
     private stockNameMap: Record<string, { name: string; sector: string }> = {
-        '005930.KS': { name: '삼성전자', sector: '반도체' },
         '000660.KS': { name: 'SK하이닉스', sector: '반도체' },
-        'AAPL': { name: '애플', sector: 'M7' },
-        'GOOGL': { name: '구글', sector: 'M7' },
+        'MSFT': { name: '마이크로소프트', sector: 'M7' },
+        'CRM': { name: '세일즈포스', sector: 'SaaS' },
+        'COIN': { name: '코인베이스', sector: '크립토' },
     };
 
     analysisModes = [
