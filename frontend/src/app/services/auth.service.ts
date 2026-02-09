@@ -120,6 +120,7 @@ export class AuthService implements OnDestroy {
       return;
     }
 
+    this.analytics.capture('user_signed_up', { email });
     this.closeModal();
   }
 
