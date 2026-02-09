@@ -27,7 +27,7 @@ export interface StockSymbol {
 export class StockSidebarComponent implements OnInit {
   isCollapsed = signal(false);
   isLoadingQuotes = signal(true);
-  selectedStock = signal('005930.KS');
+  selectedStock = signal('000660.KS');
   stockSelected = output<string>();
 
   constructor(
@@ -39,16 +39,6 @@ export class StockSidebarComponent implements OnInit {
 
   stocks = signal<StockSymbol[]>([
     {
-      code: '005930.KS',
-      name: '삼성전자',
-      shortName: '삼전',
-      color: '#1428a0',
-      price: '-',
-      change: '-',
-      isUp: true,
-      sector: '반도체',
-    },
-    {
       code: '000660.KS',
       name: 'SK하이닉스',
       shortName: 'SK',
@@ -59,24 +49,34 @@ export class StockSidebarComponent implements OnInit {
       sector: '반도체',
     },
     {
-      code: 'AAPL',
-      name: '애플',
-      shortName: 'AP',
-      color: '#555555',
+      code: 'MSFT',
+      name: '마이크로소프트',
+      shortName: 'MS',
+      color: '#00a4ef',
       price: '-',
       change: '-',
       isUp: true,
       sector: 'M7',
     },
     {
-      code: 'GOOGL',
-      name: '구글',
-      shortName: 'GG',
-      color: '#4285f4',
+      code: 'CRM',
+      name: '세일즈포스',
+      shortName: 'SF',
+      color: '#00a1e0',
       price: '-',
       change: '-',
       isUp: true,
-      sector: 'M7',
+      sector: 'SaaS',
+    },
+    {
+      code: 'COIN',
+      name: '코인베이스',
+      shortName: 'CB',
+      color: '#0052ff',
+      price: '-',
+      change: '-',
+      isUp: true,
+      sector: '크립토',
     },
   ]);
 
