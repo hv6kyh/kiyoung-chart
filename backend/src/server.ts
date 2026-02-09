@@ -17,7 +17,22 @@ const getStartDate = () => {
     return d.toISOString().split('T')[0];
 };
 
-app.use(cors());
+const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:4200')
+    .split(',')
+    .map((o) => o.trim());
+
+app.use(
+    cors({
+        origin(origin, callback) {
+            // 서버-투-서버 요청(origin 없음)이거나 허용 목록에 있으면 통과
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error(`CORS blocked: ${origin}`));
+            }
+        },
+    })
+);
 
 app.get('/api/stock/:symbol', async (req, res) => {
     const { symbol } = req.params;
