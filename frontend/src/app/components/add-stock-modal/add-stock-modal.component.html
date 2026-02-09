@@ -1,0 +1,58 @@
+<div class="modal-overlay" (click)="onClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="onClose()">&#10005;</button>
+
+        <h3 class="modal-title">종목 추가</h3>
+
+        <!-- 시장 선택 탭 -->
+        <div class="market-tabs">
+            <button class="tab-btn" [class.active]="market() === 'KRX'" (click)="setMarket('KRX')">
+                국내 (KRX)
+            </button>
+            <button class="tab-btn" [class.active]="market() === 'US'" (click)="setMarket('US')">
+                미국 (US)
+            </button>
+        </div>
+
+        @if (errorMessage()) {
+            <div class="form-error">{{ errorMessage() }}</div>
+        }
+
+        <form (submit)="$event.preventDefault(); onSubmit()">
+            <div class="form-group">
+                <label>종목 코드</label>
+                <div class="ticker-input-row">
+                    <input
+                        type="text"
+                        [placeholder]="placeholder"
+                        [value]="ticker()"
+                        (input)="onTickerInput($event)"
+                        [disabled]="isSubmitting()"
+                    />
+                    @if (market() === 'KRX') {
+                        <span class="ticker-suffix">.KS</span>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>종목 이름</label>
+                <input
+                    type="text"
+                    [placeholder]="namePlaceholder"
+                    [value]="name()"
+                    (input)="onNameInput($event)"
+                    [disabled]="isSubmitting()"
+                />
+            </div>
+
+            <button class="submit-btn" type="submit" [disabled]="isSubmitting()">
+                @if (isSubmitting()) {
+                    <span class="spinner"></span> 추가 중...
+                } @else {
+                    종목 추가
+                }
+            </button>
+        </form>
+    </div>
+</div>

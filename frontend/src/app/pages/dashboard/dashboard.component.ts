@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, computed } from '@angular/core';
+import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { HeaderComponent } from '../../components/header/header.component';
@@ -9,6 +9,7 @@ import { MatchDetailModalComponent } from '../../components/match-detail-modal/m
 import { StockService } from '../../services/stock.service';
 import { AuthService } from '../../services/auth.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { WatchlistService } from '../../services/watchlist.service';
 import { PredictionResult, MultiTimeframeResult } from '../../types/stock.types';
 
 @Component({
@@ -46,9 +47,17 @@ export class DashboardComponent implements OnInit {
         { key: 'ADVANCED' as const, label: '정밀 분석', desc: 'DTW + ATR 보정' },
     ];
 
-    currentStockInfo = computed(() =>
-        this.stockNameMap[this.currentSymbol()] || { name: this.currentSymbol(), sector: '' },
-    );
+    currentStockInfo = computed(() => {
+        const symbol = this.currentSymbol();
+        const hardcoded = this.stockNameMap[symbol];
+        if (hardcoded) return hardcoded;
+
+        // 사용자 워치리스트에서 검색
+        const userStock = this.watchlistService.userStocks().find((s) => s.code === symbol);
+        if (userStock) return { name: userStock.name, sector: userStock.sector };
+
+        return { name: symbol, sector: '' };
+    });
 
     currentPrice = computed(() => {
         const data = this.predictionData();
@@ -69,6 +78,8 @@ export class DashboardComponent implements OnInit {
             isUp: diff >= 0,
         };
     });
+
+    private watchlistService = inject(WatchlistService);
 
     constructor(
         private stockService: StockService,

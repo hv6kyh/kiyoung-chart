@@ -14,7 +14,7 @@
 
     <nav class="stock-list">
         @if (isLoadingQuotes()) {
-            @for (i of [1,2,3,4]; track i) {
+            @for (i of [1, 2, 3, 4]; track i) {
                 <div class="stock-skeleton">
                     <div class="skel-avatar skeleton-shimmer"></div>
                     @if (!isCollapsed()) {
@@ -26,9 +26,13 @@
                 </div>
             }
         } @else {
-            @for (stock of stocks(); track stock.code) {
-                <div class="stock-item" [class.active]="selectedStock() === stock.code"
-                    (click)="selectStock(stock.code)">
+            <!-- 기본 종목 (항상 표시) -->
+            @for (stock of defaultStocks(); track stock.code) {
+                <div
+                    class="stock-item"
+                    [class.active]="selectedStock() === stock.code"
+                    (click)="selectStock(stock.code)"
+                >
                     <div class="stock-main">
                         <div class="stock-avatar" [style.backgroundColor]="stock.color">
                             {{ stock.shortName }}
@@ -46,8 +50,64 @@
                     @if (!isCollapsed()) {
                         <div class="stock-metrics">
                             <span class="price">{{ stock.price }}</span>
-                            <span class="change" [class.up]="stock.isUp" [class.down]="!stock.isUp">{{ stock.change }}</span>
+                            <span
+                                class="change"
+                                [class.up]="stock.isUp"
+                                [class.down]="!stock.isUp"
+                                >{{ stock.change }}</span
+                            >
                         </div>
+                    }
+                </div>
+            }
+
+            <!-- 사용자 종목 구분선 -->
+            @if (userStocksPrices().length > 0 && !isCollapsed()) {
+                <div class="stock-divider">
+                    <span class="divider-label">내 종목</span>
+                </div>
+            }
+
+            <!-- 사용자 종목 -->
+            @for (stock of userStocksPrices(); track stock.code; let i = $index) {
+                <div
+                    class="stock-item user-stock"
+                    [class.active]="selectedStock() === stock.code"
+                    (click)="selectStock(stock.code)"
+                >
+                    <div class="stock-main">
+                        <div class="stock-avatar" [style.backgroundColor]="stock.color">
+                            {{ stock.shortName }}
+                        </div>
+                        @if (!isCollapsed()) {
+                            <div class="stock-info">
+                                <div class="stock-name-row">
+                                    <span class="stock-name">{{ stock.name }}</span>
+                                    @if (stock.sector) {
+                                        <span class="stock-tag">{{ stock.sector }}</span>
+                                    }
+                                </div>
+                                <span class="stock-code">{{ stock.code }}</span>
+                            </div>
+                        }
+                    </div>
+                    @if (!isCollapsed()) {
+                        <div class="stock-metrics">
+                            <span class="price">{{ stock.price }}</span>
+                            <span
+                                class="change"
+                                [class.up]="stock.isUp"
+                                [class.down]="!stock.isUp"
+                                >{{ stock.change }}</span
+                            >
+                        </div>
+                        <button
+                            class="btn-delete-stock"
+                            (click)="removeUserStock($event, i)"
+                            title="삭제"
+                        >
+                            <lucide-angular name="x" [size]="14"></lucide-angular>
+                        </button>
                     }
                 </div>
             }
@@ -63,3 +123,8 @@
         </div>
     }
 </aside>
+
+<!-- 종목 추가 모달 -->
+@if (showAddModal()) {
+    <app-add-stock-modal (closed)="onAddModalClosed()"></app-add-stock-modal>
+}

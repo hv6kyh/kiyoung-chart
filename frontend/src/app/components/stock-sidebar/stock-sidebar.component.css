@@ -284,3 +284,58 @@ h2 {
     justify-content: center;
     padding: 10px 8px;
 }
+
+/* ── Divider (기본 종목 / 내 종목 구분선) ── */
+.stock-divider {
+    padding: 12px 12px 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stock-divider::before,
+.stock-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+}
+
+.divider-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-disabled);
+    white-space: nowrap;
+}
+
+/* ── Delete Button (사용자 종목) ── */
+.user-stock {
+    position: relative;
+}
+
+.btn-delete-stock {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-disabled);
+    cursor: pointer;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.user-stock:hover .btn-delete-stock {
+    display: flex;
+}
+
+.btn-delete-stock:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}

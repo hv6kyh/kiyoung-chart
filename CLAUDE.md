@@ -62,12 +62,12 @@ Angular 21 with standalone components, lightweight-charts for candlestick visual
 - `/` — Landing page
 - `/chart` — Main dashboard with chart, analysis sidebar, and stock ticker
 - `/stock-qna` — Q&A page
-- `/stocks/add` — Auth-protected placeholder
 
 **Service layer:**
 - `StockService` — HTTP calls to backend API
 - `AuthService` — Supabase Auth 기반 인증 (이메일/비밀번호 로그인, 회원가입, 세션 관리). Signal 기반 상태 관리 (`isLoggedIn`, `currentUser`, `authError`, `authLoading`). `onAuthStateChange` 리스너가 단일 진입점으로 모든 인증 상태를 동기화한다.
 - `SupabaseService` — `@supabase/supabase-js` 클라이언트 싱글턴 래퍼. `autoRefreshToken`, `persistSession` 활성화.
+- `WatchlistService` — Supabase `user_stocks` 테이블 직접 CRUD. `effect()`로 `AuthService.isLoggedIn()`을 감시하여 로그인 시 자동 로드, 로그아웃 시 클리어. RLS로 사용자별 데이터 격리.
 - `UIStateService` — Shared UI state via RxJS
 - `AnalyticsService` — PostHog SDK 래퍼 (아래 Analytics 섹션 참조)
 
@@ -100,6 +100,8 @@ Angular 21 with standalone components, lightweight-charts for candlestick visual
 | `user_logged_in` | AuthService | — |
 | `user_logged_out` | AuthService | — |
 | `auth_error` | AuthService | `{ mode, error }` |
+| `watchlist_stock_added` | WatchlistService | `{ code, market }` |
+| `watchlist_stock_removed` | WatchlistService | `{ code, market }` |
 
 **새 이벤트 추가 시:** 컴포넌트에 `AnalyticsService`를 주입하고 `this.analytics.capture('event_name', { ... })`를 호출한다. 이벤트명은 `snake_case`, 프로퍼티 키도 `snake_case`로 통일한다.
 
