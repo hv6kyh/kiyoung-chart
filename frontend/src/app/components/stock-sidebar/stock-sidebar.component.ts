@@ -1,4 +1,4 @@
-import { Component, signal, output, OnInit, inject, effect } from '@angular/core';
+import { Component, signal, output, OnInit, inject, effect, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
@@ -89,7 +89,7 @@ export class StockSidebarComponent implements OnInit {
     effect(() => {
       const userStocks = this.watchlistService.userStocks();
       if (userStocks.length > 0) {
-        this.refreshQuotes();
+        untracked(() => this.refreshQuotes());
       } else {
         this.userStocksPrices.set([]);
       }
