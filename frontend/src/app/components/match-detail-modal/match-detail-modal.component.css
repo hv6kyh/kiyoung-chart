@@ -259,3 +259,38 @@
     background: var(--border-color);
     border-radius: 10px;
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        max-width: 100%;
+        padding: 24px 20px;
+        max-height: 85vh;
+    }
+
+    .date {
+        font-size: 20px;
+    }
+
+    .proof-headline {
+        font-size: 16px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .m-card {
+        padding: 14px;
+    }
+
+    .m-value {
+        font-size: 22px;
+    }
+
+    .chart-container-large {
+        padding: 12px;
+    }
+}

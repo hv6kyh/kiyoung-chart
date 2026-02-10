@@ -133,3 +133,65 @@ button {
   background-color: var(--positive-bg);
   color: var(--positive-color);
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 10px;
+  }
+
+  .header-content {
+    gap: 0;
+  }
+
+  .logo-area {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .header-nav {
+    margin-left: 6px;
+    gap: 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-item {
+    font-size: 11px;
+    padding: 6px 6px;
+    white-space: nowrap;
+  }
+
+  .header-actions {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .btn-text {
+    font-size: 11px;
+    padding: 6px 6px;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    font-size: 11px;
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .btn-icon {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 380px) {
+  .logo-text {
+    display: none;
+  }
+}

@@ -530,3 +530,53 @@
 .sidebar-container::-webkit-scrollbar-thumb:hover {
     background: var(--text-tertiary);
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+    .sidebar-wrapper {
+        width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+
+    .sidebar-container {
+        width: 100%;
+        box-sizing: border-box;
+        height: auto;
+        overflow-y: visible;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .card-title {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .metric-block {
+        padding: 12px 0;
+    }
+
+    .confidence-ring-wrap {
+        width: 64px;
+        height: 64px;
+    }
+
+    .confidence-ring {
+        width: 64px;
+        height: 64px;
+    }
+
+    .confidence-number {
+        font-size: 16px;
+    }
+
+    /* Hide hover tooltip on mobile (tap to open detail modal instead) */
+    .match-tooltip {
+        display: none;
+    }
+}

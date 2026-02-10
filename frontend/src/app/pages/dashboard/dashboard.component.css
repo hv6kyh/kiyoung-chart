@@ -231,3 +231,72 @@
     height: 72px;
     width: 320px;
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .chart-section {
+        padding: 16px;
+        gap: 12px;
+        overflow-y: visible;
+    }
+
+    .analysis-modes {
+        width: 100%;
+        display: flex;
+    }
+
+    .mode-tab {
+        flex: 1;
+        min-width: unset;
+        padding: 8px 4px;
+    }
+
+    .mode-desc {
+        display: none;
+    }
+
+    .mode-label {
+        font-size: 13px;
+    }
+
+    .name-row h2 {
+        font-size: 18px;
+    }
+
+    .current-price {
+        font-size: 22px;
+    }
+
+    .price-change {
+        font-size: 12px;
+    }
+
+    .chart-wrapper {
+        min-height: 280px;
+        padding: 8px;
+        border-radius: var(--radius-lg);
+    }
+
+    .analysis-info-overlay {
+        top: 8px;
+        left: 8px;
+    }
+
+    .info-pill {
+        padding: 4px 8px;
+    }
+
+    .disclaimer-bar {
+        font-size: 11px;
+        padding: 8px 12px;
+    }
+
+    .skeleton-header {
+        width: 100%;
+    }
+}

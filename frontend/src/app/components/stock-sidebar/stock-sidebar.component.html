@@ -111,6 +111,15 @@
                     }
                 </div>
             }
+
+            <!-- 모바일 종목 추가 버튼 (수평 스트립 마지막 아이템) -->
+            <button class="stock-item add-stock-inline" (click)="onAddStock()">
+                <div class="stock-main">
+                    <div class="stock-avatar add-avatar">
+                        <lucide-angular name="plus" [size]="16"></lucide-angular>
+                    </div>
+                </div>
+            </button>
         }
     </nav>
 
