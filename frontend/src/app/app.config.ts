@@ -9,6 +9,7 @@ import {
   Activity, MessageCircle, HelpCircle, ArrowRight,
   X, Calendar, Lightbulb,
 } from 'lucide-angular';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 const icons = {
   TrendingUp, Bell, Settings, LogOut,
@@ -23,5 +24,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     { provide: LUCIDE_ICONS, multi: true, useValue: new LucideIconProvider(icons) },
+    provideClientHydration(withEventReplay()),
   ]
 };

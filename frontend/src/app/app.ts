@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AnalyticsService } from './services/analytics.service';
 import { AuthService } from './services/auth.service';
+import { SeoService } from './services/seo.service';
 import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
 
 @Component({
@@ -28,7 +29,9 @@ export class App {
   constructor(
     analytics: AnalyticsService,
     public authService: AuthService,
+    seo: SeoService,
   ) {
     analytics.init();
+    seo.init();
   }
 }

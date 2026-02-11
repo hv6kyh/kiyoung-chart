@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import posthog from 'posthog-js';
 import { environment } from '../../environments/environment';
@@ -7,10 +8,14 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AnalyticsService {
     private initialized = false;
+    private router = inject(Router);
+    private platformId = inject(PLATFORM_ID);
 
-    constructor(private router: Router) {}
+    constructor() {}
 
     init(): void {
+        if (!isPlatformBrowser(this.platformId)) return;
+
         const { apiKey, apiHost } = environment.posthog;
         if (!apiKey) return;
 

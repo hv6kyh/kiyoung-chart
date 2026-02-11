@@ -1,5 +1,5 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input, effect, input, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input, effect, input, signal, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { createChart, IChartApi, ISeriesApi, LineStyle, CandlestickData, LineData, Time, CandlestickSeries, LineSeries, AreaSeries } from 'lightweight-charts';
 import { PredictionResult, OHLC } from '../../types/stock.types';
 
@@ -29,6 +29,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     private isInitialized = signal(false);
 
     private resizeObserver?: ResizeObserver;
+    private platformId = inject(PLATFORM_ID);
 
     data = input<PredictionResult | null>(null);
 
@@ -43,9 +44,11 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.initChart();
-        this.setupResizeObserver();
-        this.isInitialized.set(true);
+        if (isPlatformBrowser(this.platformId)) {
+            this.initChart();
+            this.setupResizeObserver();
+            this.isInitialized.set(true);
+        }
     }
 
     private setupResizeObserver() {
