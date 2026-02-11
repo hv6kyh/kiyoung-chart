@@ -31,3 +31,5 @@ dist-ssr
 .playwright-mcp/
 playwright-report/
 test-results/
+
+.serena/
